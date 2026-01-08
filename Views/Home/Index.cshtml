@@ -1,0 +1,62 @@
+﻿@using Arbitra.Background;
+@using Arbitra.DataStructure;
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Flipaloo";
+}
+
+<link rel="stylesheet" href="~/css/index.css" />
+
+<div class="event-grid">
+    
+</div>
+
+<p id="everything-loaded" class="everything-loaded">--- Všechny zápasy jdou vidět ---</p>
+
+<script src="js/handlebars.js"></script>
+<script>
+    Handlebars.registerHelper('if_grt', function(a, b, opts) {
+        if (a > b) {
+            return opts.fn(this);
+        } else {
+            return opts.inverse(this);
+        }
+    });
+</script>
+<script id="events-template" type="text/x-handlebars-template">
+    {{#each this}}
+        
+        <div class="event-preview">
+            <div class="information-row">
+                <div class="name">
+                    <a class="link" href="/Home/Counter?index={{@@index}}" >
+                        <h6>{{name}} - {{date}}</h6>
+                    </a>
+                </div>
+                {{#if_grt bestProfitPercentage 0}}
+                    <div class="profit green">
+                        <b>Profit: {{bestProfitPercentage}} %</b>
+                    </div>
+                {{else}}
+                    <div class="profit red">
+                        <b>Profit: {{bestProfitPercentage}} %</b>
+                    </div>
+                {{/if_grt}}
+            </div>
+            <div class="odds">
+                {{#each setOfOdds}}
+                    {{#with bettingOdds.[0]}}
+                    <a href="{{urlReference}}" class="odd {{bettingShop}}">
+                        <div class="odd {{bettingShop}}">
+                            {{bettingShop}}: {{bettingOdd}}
+                        </div>
+                    </a>
+                    {{/with}}
+                {{/each}}
+            </div>
+        </div>  
+    {{/each}}
+</script>
+<script src="~/js/index.js"></script>
+

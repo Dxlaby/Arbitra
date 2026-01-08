@@ -1,0 +1,111 @@
+﻿.event-preview {
+    /*display: flex;*/
+    /*justify-content: flex-start; !* Center content to the left within each grid cell *!*/
+    /*align-items: center;*/
+    
+    margin: auto    ;
+    background-color: #212529;
+    color: lightgray;
+    padding: 10px;
+    border-radius: 8px;
+    justify-content: space-between;
+    /*height: 100px;*/
+    width: 350px;
+}   
+
+.event-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 16px;
+    row-gap: 40px;
+    margin-bottom: 30px;
+
+}
+
+@media (max-width: 799px) {
+    .event-grid {
+        grid-template-columns: 1fr ;
+    }
+}
+
+@media (min-width: 800px) and (max-width: 1149px) {
+    .event-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1150px) and (max-width: 1499px) {
+    .event-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (min-width: 1500px) {
+    .event-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+.name {
+    display: inline-block;
+    max-width: 65%;
+}
+
+.profit {
+    display: inline-block;
+    float: right;
+}
+
+.odds {
+    display: flex;
+    justify-content: space-between;   
+}
+
+.odd {
+    display: inline-block;
+    text-decoration: none;
+    color: lightgray;
+    background-color: #363636;
+    padding: 3px;
+    border-radius: 999999px;
+}
+
+.green {
+    color: green;
+}
+
+.red{
+    color: red;
+}
+
+.Tipsport {
+    color: white;
+    background-color: #007aff;
+    text-decoration: underline;
+    text-decoration-color: rgb(255, 142, 19);
+}
+
+.Betano{
+    color: white;
+    background-color: #ff6600;
+}
+
+.Fortuna{
+    color:black;
+    background-color: #FFDB01;
+}
+
+.everything-loaded {
+    color: white;
+    text-align: center
+    
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+}
+
+.link:hover{
+    color: rgb(128, 128, 128);
+}
