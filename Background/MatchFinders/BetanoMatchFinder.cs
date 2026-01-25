@@ -81,7 +81,7 @@ namespace Arbitra.Background.MatchFinders
                                               + "']";
         }
 
-        public ListOfMatches FindAllMatches(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut) //
+        public ListOfMatches FindAllMatchesSelenium(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut) //
         {
             HtmlWeb web = new HtmlWeb();
             

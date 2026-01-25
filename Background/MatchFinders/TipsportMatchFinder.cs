@@ -50,7 +50,7 @@ namespace Arbitra.Background.MatchFinders
             blockedOddClassName = "sc-568228cd-12 mZBML";
         }
 
-        public ListOfMatches FindAllMatches(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut)
+        public ListOfMatches FindAllMatchesSelenium(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut)
         {
             ListOfMatches listOfMatches = new ListOfMatches();
             var service = FirefoxDriverService.CreateDefaultService(geckoDriverDirectory, "geckodriver");

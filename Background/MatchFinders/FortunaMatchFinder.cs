@@ -16,52 +16,58 @@ namespace Arbitra.Background.MatchFinders
     internal class FortunaMatchFinder : IMatchFinder
     {
         string _bettingShopName; 
-        string url; 
+        string url;
+        string mainUrl;
         By cookieButtonElementPath;
-        By matchesElementPath;
+        By matchElementPath;
         By namesElementPath;
+        By showMoreElementPath;
         By oddsElementPath;
+        By oddsContainerPath;
         By referenceLinkElementPath;
         By dateElementPath;
         public FortunaMatchFinder()
         {
             _bettingShopName = "Fortuna";
-            url = "https://www.ifortuna.cz/sazeni?selectDates=1";//"https://www.ifortuna.cz/sazeni/fotbal";//
-            cookieButtonElementPath = By.Id("cookie-consent-button-accept");
-            matchesElementPath = By.CssSelector(".tablesorter-hasChildRow");
-            namesElementPath = By.CssSelector(".market-name");
-            oddsElementPath = By.CssSelector(".odds-value");
-            referenceLinkElementPath = By.CssSelector(".event-link");
-            dateElementPath = By.CssSelector(".event-datetime");
+            url = "https://www.ifortuna.cz/sazeni?filter=all";//"https://www.ifortuna.cz/sazeni/fotbal";//
+            mainUrl = "https://www.ifortuna.cz";
+            cookieButtonElementPath = By.CssSelector(".deny");
+            matchElementPath = By.CssSelector(".no-underline.fixture-safe-link.cursor-pointer.fixture-card");
+            namesElementPath = By.CssSelector(".m-0.text-sm");
+            showMoreElementPath = By.CssSelector(".offer-card-group-header__caret.text-content-secondary.cursor-pointer.transition-all");
+            oddsElementPath = By.CssSelector(".odds-button2__value.block.text-xs.uppercase.text-ellipsis.max-w-full.overflow-hidden.text-content-primary");
+            oddsContainerPath = By.CssSelector(".fixture-card__market-outcomes");
+            referenceLinkElementPath = By.CssSelector(".no-underline.fixture-safe-link.cursor-pointer.fixture-card");
+            dateElementPath = By.CssSelector(".fixture-card__time");
         }
 
-        public ListOfMatches FindAllMatches(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut)
+        public ListOfMatches FindAllMatchesSelenium(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut)
         {
-            return new ListOfMatches();
-            //initialize driver and stu
-            // using (var driver = new FirefoxDriver(geckoDriverDirectory, options, commandTimeOut))
-            // {
-            //     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-            //     driver.Navigate().GoToUrl(url);
-            //
-            //
-            //     //click on cookie button
-            //     try
-            //     {
-            //         wait.Until(ExpectedConditions.ElementIsVisible(cookieButtonElementPath));
-            //         IWebElement buttonConsent = driver.FindElement(cookieButtonElementPath);
-            //         buttonConsent.Click();
-            //     }
-            //     catch
-            //     {
-            //     
-            //     }
-            //
-            //     ScrollDown(driver, wait);
-            //
-            //     //finally find all matches odds
-            //     return FindListOfMatches(driver);
-            // }
+            // initialize driver and stu
+            using (var driver = new ChromeDriver(geckoDriverDirectory, options, commandTimeOut))
+            {
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                driver.Navigate().GoToUrl(url);
+            
+            
+                //click on cookie button
+                try
+                {
+                    // wait.Until(ExpectedConditions.ElementIsVisible(cookieButtonElementPath));
+                    IWebElement buttonConsent = driver.FindElement(cookieButtonElementPath);
+                    buttonConsent.Click();
+                }
+                catch
+                {
+                
+                }
+            
+                ScrollDown(driver, wait);
+                
+            
+                //finally find all matches odds
+                return FindListOfMatches(driver);
+            }
         }
             
         public void ScrollDown(IWebDriver driver, WebDriverWait wait)
@@ -93,17 +99,24 @@ namespace Arbitra.Background.MatchFinders
                 }
             }
         }
-            
+        
         public ListOfMatches FindListOfMatches(IWebDriver driver)
         {
-            var matchesElements = driver.FindElements(matchesElementPath);
+            var matchesElements = driver.FindElements(matchElementPath);
             ListOfMatches listOfMatches = new ListOfMatches();
             
             foreach (IWebElement matchElement in matchesElements)
             {
-                Match? match = GetMatchFromElement(matchElement);
-                if (match != null)
-                    listOfMatches.AddMatch(match);
+                try
+                {
+                    Match? match = GetMatchFromElement(matchElement);
+                    if (match != null)
+                        listOfMatches.AddMatch(match);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                }
             }
             return listOfMatches;
         }
@@ -117,18 +130,35 @@ namespace Arbitra.Background.MatchFinders
             }
             catch
             {
-                return null;
+                try
+                {
+                    IWebElement showMoreElement = matchElement.FindElement(showMoreElementPath);
+                    showMoreElement.Click();
+                    matchElement.FindElement(namesElementPath);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
             IWebElement matchNameElement = matchElement.FindElement(namesElementPath);
             string matchName = matchNameElement.Text;
-            IWebElement referenceElement = matchElement.FindElement(referenceLinkElementPath);
-            string referenceUrl = referenceElement.GetAttribute("href");
-        
-            IWebElement dateElement = matchElement.FindElement(dateElementPath);
-            DateTime dateTime = GetDate(dateElement.Text);
-            if ((dateTime - DateTime.Now).TotalHours < 2)
+            // IWebElement referenceElement = matchElement.FindElement(referenceLinkElementPath);
+            string referenceUrl = matchElement.GetAttribute("href");
+            DateTime dateTime = DateTime.Now;
+            try
+            {
+                IWebElement dateElement = matchElement.FindElement(dateElementPath);
+                dateTime = GetDate(dateElement.Text);
+                if ((dateTime - DateTime.Now).TotalHours < 2)
+                    return null;
+            }
+            catch
+            {
                 return null;
-        
+            }
+
+
             var roughOdds = GetOddsFromElement(matchElement, referenceUrl);
             MatchOdds? sortedOdds = SortOdds(roughOdds);
             
@@ -146,15 +176,27 @@ namespace Arbitra.Background.MatchFinders
                 return null;
         }
         
-        private Odds?[] GetOddsFromElement(IWebElement oddsElement, string referenceUrl)
+        private Odds?[] GetOddsFromElement(IWebElement matchElement, string referenceUrl)
         {
-            var oddElements = oddsElement.FindElements(oddsElementPath);
+            var containerElements = matchElement.FindElements(oddsContainerPath);
             List<Odds?> oddsList = new List<Odds?>();
-            foreach (IWebElement maybeOddElement in oddElements)
+            List<IWebElement>? allOddElements = new List<IWebElement>(); 
+            foreach (IWebElement containerElement in containerElements)
+            {
+                var oddElements = matchElement.FindElements(oddsElementPath);
+                allOddElements.AddRange(oddElements);
+                
+                if (allOddElements.Count == 2)
+                    break;
+                else if (allOddElements.Count == 6)
+                    break;
+            }
+
+            foreach (IWebElement oddElement in allOddElements)
             {
                 try
                 {
-                    float bettingOdd = float.Parse(maybeOddElement.Text, CultureInfo.InvariantCulture.NumberFormat);
+                    float bettingOdd = float.Parse(oddElement.Text, CultureInfo.InvariantCulture.NumberFormat);
                     if (bettingOdd > 1)
                     {
                         List<Odd> oddList = new List<Odd>();
@@ -170,14 +212,21 @@ namespace Arbitra.Background.MatchFinders
                     oddsList.Add(null);
                 }
             }
-        
+
             return oddsList.ToArray();
         }
         
         private MatchOdds? SortOdds(Odds?[] roughOdds)
         {
-            if (roughOdds.Length == 2 || roughOdds.Length == 6)
+            if (roughOdds.Length == 2)
             {
+                return new MatchOdds(roughOdds);
+            }
+            else if (roughOdds.Length == 6)
+            {
+                Odds placeHolderOdd = roughOdds[4];
+                roughOdds[4] = roughOdds[5];
+                roughOdds[5] = placeHolderOdd;
                 return new MatchOdds(roughOdds);
             }
             else
@@ -202,16 +251,30 @@ namespace Arbitra.Background.MatchFinders
             }
                 
         }
-        
+
         private DateTime GetDate(string dateText)
         {
             string[] dateAndTime = dateText.Split(" ");
-        
+            string time = dateAndTime[^1];
+            string[] times = time.Split(":", 2);
+            
+            int minute = int.Parse(times[1]);
+            int hour = int.Parse(times[0]);
+            int year = DateTime.Now.Year;
+            int month = DateTime.Now.Month;
+            int day = DateTime.Now.Day;
+            DateTime today = new DateTime(year, month, day, hour, minute, 0);
+            
+            if (dateAndTime[0] == "dnes")
+                return today;
+            if (dateAndTime[0] == "zítra")
+                return today.AddDays(-1);
+                
+            var culture = new System.Globalization.CultureInfo("cs-CZ");
+            return DateTime.Parse(dateText, culture);
             string date = dateAndTime[0];
-            string time = dateAndTime[1];
             
             string[] dates = date.Split(".");
-            string[] times = time.Split(":", 2);
             
             if (int.Parse(dates[1]) == 2 && int.Parse(dates[0]) == 29 && DateTime.Now.Year%4 == 0) 
                 return new DateTime(DateTime.Now.Year, int.Parse(dates[1]), int.Parse(dates[0]),

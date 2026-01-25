@@ -8,13 +8,12 @@ namespace Arbitra.DataStructure
         //Odds table are odds, where more than one outcome can happen
         //It's called table because it has lots of different combinations of 1, 0, 2, even though it's just an array
         //BettingOdds are in oder 1, 0, 2, 10, 02, 12 for three outcome matches
-        //for two outcome matches is just 1, 2
+        //for two outcome matches it is just 1, 2
         public MatchOdds(Odds?[] oddsTable) 
         {
-            OddsTable = oddsTable;
-
-            if (OddsTable.Length != 2 && OddsTable.Length != 6)
+            if (oddsTable.Length != 2 && oddsTable.Length != 6)
                 throw new Exception("You can only give array as argument, if it has 2 or 6 oddsTable");
+            OddsTable = oddsTable;
         }
 
         public void Merge(MatchOdds matchOdds) 

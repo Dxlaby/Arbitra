@@ -16,6 +16,8 @@ namespace Arbitra.Background.MatchFinders
             // matchFinders.Add(new BetanoMatchFinder());
             // matchFinders.Add(new TipsportMatchFinder());
             // matchFinders.Add(new FortunaMatchFinder());
+            matchFinders.Add(new SynottipMatchFinder());
+
             Console.WriteLine(Directory.GetCurrentDirectory());
 
             // string geckoDriverDirectory = @"Drivers/geckodriver-v0.36.0-linux-aarch64";
@@ -40,7 +42,8 @@ namespace Arbitra.Background.MatchFinders
             
             foreach (var matchFinder in matchFinders)
             {
-                var listOfMatches = matchFinder.FindAllMatches(geckoDriverDirectory, options , commandTimeOut);
+                // var listOfMatches = matchFinder.FindAllMatchesSelenium(geckoDriverDirectory, options , commandTimeOut);
+                var listOfMatches = matchFinder.FindAllMatchesApi();
                 finalListOfMatches.Merge(listOfMatches);
             }
 

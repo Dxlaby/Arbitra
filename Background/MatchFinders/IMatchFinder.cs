@@ -12,6 +12,15 @@ namespace Arbitra.Background.MatchFinders
 {
     interface IMatchFinder
     {
-        public ListOfMatches FindAllMatches(string geckoDriverDirectory, ChromeOptions options, TimeSpan commandTimeOut);
+        public ListOfMatches FindAllMatchesSelenium(string geckoDriverDirectory, ChromeOptions options,
+            TimeSpan commandTimeOut)
+        {
+            return new ListOfMatches();
+        }
+        public ListOfMatches FindAllMatchesApi()
+            {
+                return new ListOfMatches();
+            }
+        
     }
 }

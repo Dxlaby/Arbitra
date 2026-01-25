@@ -37,4 +37,12 @@
       <EmbeddedResource Remove="Drivers\geckodriver-v0.36.0-linux-aarch64\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Drivers\geckodriver" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DownloadedWebpages\" />
+    </ItemGroup>
+
 </Project>
