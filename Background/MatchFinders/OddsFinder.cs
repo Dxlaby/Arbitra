@@ -15,8 +15,8 @@ namespace Arbitra.Background.MatchFinders
             
             // matchFinders.Add(new BetanoMatchFinder());
             // matchFinders.Add(new TipsportMatchFinder());
-            // matchFinders.Add(new FortunaMatchFinder());
-            matchFinders.Add(new SynottipMatchFinder());
+            matchFinders.Add(new FortunaMatchFinder());
+            // matchFinders.Add(new SynottipMatchFinder());
 
             Console.WriteLine(Directory.GetCurrentDirectory());
 
@@ -51,7 +51,7 @@ namespace Arbitra.Background.MatchFinders
             finalListOfEvents.Sort((a, b) => a.BestImpliedProbability.CompareTo(b.BestImpliedProbability));
             var listOfEvents = finalListOfEvents.Take(500);
             string json = JsonSerializer.Serialize<IEnumerable<Event>>(listOfEvents);
-            // File.WriteAllText(@"wwwroot/Data/BettingOdds.json", json);
+            File.WriteAllText(@"wwwroot/Data/BettingOdds.json", json);
             //https://stackoverflow.com/questions/16921652/how-to-write-a-json-file-in-c
         }
         

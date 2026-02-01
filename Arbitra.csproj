@@ -11,8 +11,12 @@
     <ItemGroup>
       <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.0" />
+      <PackageReference Include="Microsoft.ClearScript" Version="7.5.0" />
+      <PackageReference Include="Microsoft.ClearScript.V8.Native.linux-x64" Version="7.5.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="10.0.1" />
       <PackageReference Include="OpenQA.Selenium.Chrome.ChromeDriverExtensions" Version="1.2.0" />
+      <PackageReference Include="protobuf" Version="2.6.1.1" />
+      <PackageReference Include="ProtoBufJsonConverter" Version="0.11.0" />
       <PackageReference Include="SeleniumExtras.WaitHelpers" Version="1.0.2" />
     </ItemGroup>
 

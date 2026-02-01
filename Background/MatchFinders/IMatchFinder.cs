@@ -18,9 +18,9 @@ namespace Arbitra.Background.MatchFinders
             return new ListOfMatches();
         }
         public ListOfMatches FindAllMatchesApi()
-            {
-                return new ListOfMatches();
-            }
+        {
+            return new ListOfMatches();
+        }
         
     }
 }

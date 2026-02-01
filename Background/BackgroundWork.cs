@@ -25,7 +25,7 @@ namespace Arbitra.Background
                 
                 timeInfo += "\ndo ";
                 timeInfo += DateTime.Now.ToString("d. M. H:mm");
-                File.WriteAllText(@"wwwroot/Data/LastLoaded.txt", timeInfo);
+                // File.WriteAllText(@"wwwroot/Data/LastLoaded.txt", timeInfo);
                 
                 await Task.Delay(TimeSpan.FromHours(8));
             }
