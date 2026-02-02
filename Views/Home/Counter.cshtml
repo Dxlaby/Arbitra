@@ -20,7 +20,7 @@
         <div class="setOfOddsTable">
             <a href="@odds.BettingOdds[0].UrlReference" class="odd @odds.BettingOdds[0].BettingShop">
                 <div class="odd @odds.BettingOdds[0].BettingShop">
-                    @odds.BettingOdds[0].BettingShop : @odds.BettingOdds[0].BettingOdd
+                    @odds.BettingOdds[0].BettingShop : @Math.Round(odds.BettingOdds[0].BettingOdd, 2)
                 </div>
             </a>
             <input class="odd-input" type="number" min="0" step="100"/> Kč

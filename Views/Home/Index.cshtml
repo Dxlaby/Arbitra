@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using System.Text.Json
 @{
-    ViewData["Title"] = "Flipaloo";
+    ViewData["Title"] = "Arbitra";
 }
 
 <link rel="stylesheet" href="~/css/index.css" />
@@ -23,6 +23,11 @@
             return opts.inverse(this);
         }
     });
+    
+    Handlebars.registerHelper('round', function(value, decimals) {
+            if (isNaN(value)) return "0";
+            return parseFloat(value).toFixed(decimals);
+        });
 </script>
 <script id="events-template" type="text/x-handlebars-template">
     {{#each this}}
@@ -36,11 +41,11 @@
                 </div>
                 {{#if_grt bestProfitPercentage 0}}
                     <div class="profit green">
-                        <b>Profit: {{bestProfitPercentage}} %</b>
+                        <b>Profit: {{round bestProfitPercentage 2}} %</b>
                     </div>
                 {{else}}
                     <div class="profit red">
-                        <b>Profit: {{bestProfitPercentage}} %</b>
+                        <b>Profit: {{round bestProfitPercentage 2}} %</b>
                     </div>
                 {{/if_grt}}
             </div>

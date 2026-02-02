@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -67,72 +68,102 @@ namespace Arbitra.Background.MatchFinders
             }
 
             var tournamentsIDs = GetTournamentsIDs(httpClient, sportIDs);
-            if (tournamentsIDs == null) return new ListOfMatches();
             var matchIDs = GetMatchIDs(httpClient, tournamentsIDs);
-            if (matchIDs == null) return new ListOfMatches();
 
             ListOfMatches listOfMatches = GetMatchesFromMatchIDs(httpClient, matchIDs);
             return listOfMatches;
         }
 
-        public List<string>? GetTournamentsIDs(HttpClient httpClient, List<string> sportIDs)
+        public List<Tuple<string, string>> GetTournamentsIDs(HttpClient httpClient, List<string> sportIDs)
         {
-            List<string> tournamentIDs = new List<string>();
+            List<Tuple<string, string>> pathAndTourIds = new List<Tuple<string, string>>();
             foreach (var sportID in sportIDs)
             {
                 string urlSport = "https://api.ifortuna.cz/offer/structure/api/v1_0/sport/" + sportID +
                                   "/tournaments?categories=true&timeFilter=all";
                 var sportJson = GetNodeFromUrl(httpClient, urlSport);
+
                 if (sportJson == null || sportJson["tournaments"] == null) return null;
+                string sportSeoName = sportJson["sport"]["seoName"].AsValue().ToString();
                 foreach (var tournament in sportJson["tournaments"].AsArray())
                 {
-                    var IdRaw = tournament["id"];
-                    if (IdRaw != null)
-                        tournamentIDs.Add(IdRaw.AsValue().ToString());
+                    var tournamentIdRaw = tournament["id"];
+                    var categoryIdRaw = tournament["categoryId"];
+                    if (categoryIdRaw == null || tournamentIdRaw == null) continue;
+                    string? categorySeoName = null;
+                    foreach (var category in sportJson["categories"].AsArray())
+                    {
+                        if (category["id"].AsValue().ToString() == categoryIdRaw.AsValue().ToString())
+                        {
+                            categorySeoName = category["seoName"].AsValue().ToString();
+                            break;
+                        }
+                    }
+                    if (categorySeoName == null) continue;
+                    string tournamentSeoName = tournament["seoName"].AsValue().ToString();
+                    string path = "https://www.ifortuna.cz/sazeni/" +
+                                  sportSeoName + "/" + categorySeoName + "/" + tournamentSeoName + "/";
+
+                    string tournamentId = tournamentIdRaw.AsValue().ToString();
+                    
+                    Tuple<string, string> pathAndTourId = new Tuple<string, string>(path, tournamentId);
+                    pathAndTourIds.Add(pathAndTourId);
                 }
             }
 
-            return tournamentIDs;
+            return pathAndTourIds;
         }
         
-        public List<string>? GetMatchIDs(HttpClient httpClient, List<string> tournamentIDs)
+        public List<Tuple<string, string, DateTime>> GetMatchIDs(HttpClient httpClient, List<Tuple<string, string>> pathAndTourIds)
         {
-            List<string> matchIDs = new List<string>();
-            foreach (var tounamentID in tournamentIDs)
+            List<Tuple<string, string, DateTime>> matchPathIdDateList = new List<Tuple<string, string, DateTime>>();
+            foreach (var tourPathId in pathAndTourIds)
             {
-                string urlTour = "https://api.ifortuna.cz/offer/structure/api/v1_0/tournament/"+ tounamentID
+                string urlTour = "https://api.ifortuna.cz/offer/structure/api/v1_0/tournament/"+ tourPathId.Item2
                                   +"/matches?timeFilter=all";
                 JsonNode? tourJson = GetNodeFromUrl(httpClient, urlTour);
                 if (tourJson == null || tourJson["fixtures"] == null) continue;
                 foreach (var match in tourJson["fixtures"].AsArray())
                 {
                     var IdRaw = match["id"];
-                    if (IdRaw != null)
-                        matchIDs.Add(IdRaw.AsValue().ToString());
+                    var startDateTimeRaw = match["startDatetime"];
+                    var matchSeoNameRaw = match["seoName"];
+                    if (IdRaw == null || startDateTimeRaw == null || matchSeoNameRaw == null) continue;
+                    
+                    string matchId = IdRaw.AsValue().ToString();
+                    string matchSeoName = matchSeoNameRaw.AsValue().ToString();
+                    string path = tourPathId.Item1 + matchSeoName + "?filter=all&tab=offer";
+                    long startDateTimeInt64 = startDateTimeRaw.GetValue<long>();
+                    DateTime startDateTime = DateTimeOffset.FromUnixTimeMilliseconds(startDateTimeInt64).DateTime;
+                    startDateTime = startDateTime.AddHours(1);
+
+                    Tuple<string, string, DateTime> matchPathIdDate = 
+                        new Tuple<string, string, DateTime>(path, matchId, startDateTime );
+                    matchPathIdDateList.Add(matchPathIdDate);
                 }
             }
 
-            return matchIDs;
+            return matchPathIdDateList;
         }
 
-        public ListOfMatches GetMatchesFromMatchIDs(HttpClient httpClient, List<string> matchIDs)
+        public ListOfMatches GetMatchesFromMatchIDs(HttpClient httpClient, List<Tuple<string, string, DateTime>> matchPathIdDateList)
         {
             ListOfMatches listOfMatches = new ListOfMatches();
-            foreach (var matchID in matchIDs)
+            foreach (var matchPathIdDate in matchPathIdDateList)
             {
-                string urlMatch = "https://api.ifortuna.cz/offer/markets/api/v1_0/fixture/" + matchID
+                string urlMatch = "https://api.ifortuna.cz/offer/markets/api/v1_0/fixture/" + matchPathIdDate.Item2
                     + "/markets/overview";
                 JsonNode? matchJson = GetNodeFromUrl(httpClient, urlMatch);
                 if(matchJson == null) 
                     continue;
-                Match? match = GetMatchFromMatchJson(matchJson);
+                Match? match = GetMatchFromMatchJson(matchJson, matchPathIdDate.Item1, matchPathIdDate.Item3);
                 if (match != null) listOfMatches.AddMatch(match);
             }
 
             return listOfMatches;
         }
 
-        public Match? GetMatchFromMatchJson(JsonNode matchJson)
+        public Match? GetMatchFromMatchJson(JsonNode matchJson, string referencePath, DateTime date)
         {
             JsonNode? outcomes = matchJson?.AsArray()?.FirstOrDefault()?["outcomes"];
             MatchType matchType = MatchType.ThreeOutcome;
@@ -156,7 +187,7 @@ namespace Arbitra.Background.MatchFinders
                     {
                         recognitionTeam1 = outcome["longName"].AsValue().ToString();
                         float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
-                        Odd odd = new Odd(_bettingShopName, url, floatOdd); // add reference URL
+                        Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
                         oddsArray[0] = new Odds(oddList);
@@ -165,7 +196,7 @@ namespace Arbitra.Background.MatchFinders
                     {
                         recognitionTeam2 = outcome["longName"].AsValue().ToString();
                         float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
-                        Odd odd = new Odd(_bettingShopName, url, floatOdd); // add reference URL
+                        Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
                         oddsArray[1] = new Odds(oddList);
@@ -174,7 +205,7 @@ namespace Arbitra.Background.MatchFinders
                 }
 
                 string matchName = recognitionTeam1 + " - " + recognitionTeam2;
-                return new Match(matchName, recognitionTeam1, recognitionTeam2, DateTime.Today, oddsArray);
+                return new Match(matchName, recognitionTeam1, recognitionTeam2, date, oddsArray);
             }
             else
             {
@@ -186,7 +217,7 @@ namespace Arbitra.Background.MatchFinders
                     if (type == "0")
                     {
                         float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
-                        Odd odd = new Odd(_bettingShopName, url, floatOdd); // add reference URL
+                        Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
                         oddsArray[1] = new Odds(oddList);
@@ -195,7 +226,7 @@ namespace Arbitra.Background.MatchFinders
                     {
                         recognitionTeam1 = outcome["longName"].AsValue().ToString();
                         float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
-                        Odd odd = new Odd(_bettingShopName, url, floatOdd); // add reference URL
+                        Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
                         oddsArray[0] = new Odds(oddList);
@@ -204,7 +235,7 @@ namespace Arbitra.Background.MatchFinders
                     {
                         recognitionTeam2 = outcome["longName"].AsValue().ToString();
                         float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
-                        Odd odd = new Odd(_bettingShopName, url, floatOdd); // add reference URL
+                        Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
                         oddsArray[2] = new Odds(oddList);
@@ -213,7 +244,7 @@ namespace Arbitra.Background.MatchFinders
                 }
 
                 string matchName = recognitionTeam1 + " - " + recognitionTeam2;
-                return new Match(matchName, recognitionTeam1, recognitionTeam2, DateTime.Today, oddsArray);
+                return new Match(matchName, recognitionTeam1, recognitionTeam2, date, oddsArray);
             }
         }
 
