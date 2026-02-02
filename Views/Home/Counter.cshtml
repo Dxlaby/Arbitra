@@ -20,7 +20,7 @@
         <div class="setOfOddsTable">
             <a href="@odds.BettingOdds[0].UrlReference" class="odd @odds.BettingOdds[0].BettingShop">
                 <div class="odd @odds.BettingOdds[0].BettingShop">
-                    @odds.BettingOdds[0].BettingShop : @Math.Round(odds.BettingOdds[0].BettingOdd, 2)
+                    @odds.BettingOdds[0].BettingShop : @odds.BettingOdds[0].BettingOdd
                 </div>
             </a>
             <input class="odd-input" type="number" min="0" step="100"/> Kč
@@ -34,46 +34,51 @@
     Zhruba vyhrát: <input id="win-input" type="number" min="0" step="100"/> Kč
 </p>
 <p>
-    Profit: <b id="profit"> hh</b> KČ
+    Profit: <b id="profit"> </b> KČ
 </p>
     
-    
 <script>
-    const model = @{@Html.Raw(JsonSerializer.Serialize(Model));};
+    const model = @Html.Raw(JsonSerializer.Serialize(Model));
+    
     const oddInputs = document.getElementsByClassName("odd-input");
     const betInput = document.getElementById("bet-input");
     const winInput = document.getElementById("win-input");
     const profit = document.getElementById("profit");
     
-    for (let i = 0; i < model.OddsTable.length; i++) {
-        oddInputs[i].addEventListener('input', function (){
-            createValues(oddInputs[i].value*model.OddsTable[i].BettingOdd*model.BestImpliedProbability)
-        })
+    for (let i = 0; i < model.SetOfOdds.length; i++) {
+        oddInputs[i].addEventListener('input', function () {
+            const oddsValue = model.SetOfOdds[i].BettingOdds[0].BettingOdd;
+            createValues(parseFloat(this.value) * oddsValue * model.BestImpliedProbability);
+        });
     }
     
     betInput.addEventListener('input', function (){
-        createValues(betInput.value)
-    })
+        createValues(parseFloat(this.value) || 0);
+    });
     
     winInput.addEventListener('input', function (){
-        createValues(Math.round(winInput.value*model.BestImpliedProbability))    
-    })
+        createValues(Math.round((parseFloat(this.value) || 0) * model.BestImpliedProbability));    
+    });
     
     window.addEventListener("load", function () {
         createValues(1000);
     });
     
     function createValues(howMuchToBet) {
-        betInput.value = 0;
-        winInput.value = 0;
-        for (let i = 0; i < model.OddsTable.length; i++) {
-             let whatToBet = Math.round(howMuchToBet/model.BestImpliedProbability/model.OddsTable[i].BettingOdd);
+        let totalBet = 0;
+        let totalWin = 0;
+        
+        for (let i = 0; i < model.SetOfOdds.length; i++) {
+             let oddValue = model.SetOfOdds[i].BettingOdds[0].BettingOdd;
+             let whatToBet = Math.round(howMuchToBet / model.BestImpliedProbability / oddValue);
+             
              oddInputs[i].value = whatToBet;
-             betInput.value = parseFloat(betInput.value) + whatToBet;
-             winInput.value = parseFloat(winInput.value) + whatToBet*model.OddsTable[i].BettingOdd;
+             totalBet += whatToBet;
+             totalWin += (whatToBet * oddValue);
         }
-        winInput.value = Math.round(parseFloat(winInput.value)/model.OddsTable.length);
-        profit.innerText = Math.round(parseFloat(winInput.value) - parseFloat(betInput.value));
+        
+        betInput.value = totalBet;
+        winInput.value = Math.round(totalWin / model.SetOfOdds.length);
+        profit.innerText = Math.round(winInput.value - totalBet) + " Kč";
     }
-    
 </script>
