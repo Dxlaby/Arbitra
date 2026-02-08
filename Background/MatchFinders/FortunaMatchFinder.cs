@@ -23,7 +23,6 @@ namespace Arbitra.Background.MatchFinders
     {
         string _bettingShopName; 
         string url;
-        string mainUrl;
         private string sportsUrl;
         By cookieButtonElementPath;
         By matchElementPath;
@@ -37,7 +36,6 @@ namespace Arbitra.Background.MatchFinders
         {
             _bettingShopName = "Fortuna";
             url = "https://www.ifortuna.cz/sazeni?filter=all";//"https://www.ifortuna.cz/sazeni/fotbal";//
-            mainUrl = "https://www.ifortuna.cz";
             sportsUrl = "https://api.ifortuna.cz/offer/structure/api/v1_0/sports?timeFilter=all";
             cookieButtonElementPath = By.CssSelector(".deny");
             matchElementPath = By.CssSelector(".no-underline.fixture-safe-link.cursor-pointer.fixture-card");
@@ -52,13 +50,24 @@ namespace Arbitra.Background.MatchFinders
         public ListOfMatches FindAllMatchesApi()
         {
             using var httpClient = new HttpClient();
+            var sportIDs = GetSportIds(httpClient);
+            if (sportIDs == null) return new ListOfMatches();
+            var tournamentsIDs = GetTournamentsIDs(httpClient, sportIDs);
+            var matchIDs = GetMatchIDs(httpClient, tournamentsIDs);
+
+            ListOfMatches listOfMatches = GetMatchesFromMatchIDs(httpClient, matchIDs);
+            return listOfMatches;
+        }
+
+        private List<string>? GetSportIds(HttpClient httpClient)
+        {
             List<string> sportIDs = new List<string>();
 
             var sportsJson = GetNodeFromUrl(httpClient, sportsUrl);
             if (sportsJson == null)
             {
                 Console.WriteLine("No sports types have been found. Probably due to an error from API");
-                return new ListOfMatches();
+                return null;
             }
             foreach (var sport in sportsJson.AsArray())
             {
@@ -67,14 +76,10 @@ namespace Arbitra.Background.MatchFinders
                     sportIDs.Add(sportIdRaw.AsValue().ToString());
             }
 
-            var tournamentsIDs = GetTournamentsIDs(httpClient, sportIDs);
-            var matchIDs = GetMatchIDs(httpClient, tournamentsIDs);
-
-            ListOfMatches listOfMatches = GetMatchesFromMatchIDs(httpClient, matchIDs);
-            return listOfMatches;
+            return sportIDs;
         }
 
-        public List<Tuple<string, string>> GetTournamentsIDs(HttpClient httpClient, List<string> sportIDs)
+        private List<Tuple<string, string>> GetTournamentsIDs(HttpClient httpClient, List<string> sportIDs)
         {
             List<Tuple<string, string>> pathAndTourIds = new List<Tuple<string, string>>();
             foreach (var sportID in sportIDs)
@@ -114,7 +119,7 @@ namespace Arbitra.Background.MatchFinders
             return pathAndTourIds;
         }
         
-        public List<Tuple<string, string, DateTime>> GetMatchIDs(HttpClient httpClient, List<Tuple<string, string>> pathAndTourIds)
+        private List<Tuple<string, string, DateTime>> GetMatchIDs(HttpClient httpClient, List<Tuple<string, string>> pathAndTourIds)
         {
             List<Tuple<string, string, DateTime>> matchPathIdDateList = new List<Tuple<string, string, DateTime>>();
             foreach (var tourPathId in pathAndTourIds)
@@ -146,7 +151,7 @@ namespace Arbitra.Background.MatchFinders
             return matchPathIdDateList;
         }
 
-        public ListOfMatches GetMatchesFromMatchIDs(HttpClient httpClient, List<Tuple<string, string, DateTime>> matchPathIdDateList)
+        private ListOfMatches GetMatchesFromMatchIDs(HttpClient httpClient, List<Tuple<string, string, DateTime>> matchPathIdDateList)
         {
             ListOfMatches listOfMatches = new ListOfMatches();
             foreach (var matchPathIdDate in matchPathIdDateList)
@@ -163,7 +168,7 @@ namespace Arbitra.Background.MatchFinders
             return listOfMatches;
         }
 
-        public Match? GetMatchFromMatchJson(JsonNode matchJson, string referencePath, DateTime date)
+        private Match? GetMatchFromMatchJson(JsonNode matchJson, string referencePath, DateTime date)
         {
             JsonNode? outcomes = matchJson?.AsArray()?.FirstOrDefault()?["outcomes"];
             MatchType matchType = MatchType.ThreeOutcome;
@@ -186,7 +191,7 @@ namespace Arbitra.Background.MatchFinders
                     if (type == "1")
                     {
                         recognitionTeam1 = outcome["longName"].AsValue().ToString();
-                        float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
+                        float floatOdd = outcome["odds"].GetValue<float>();
                         Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
@@ -195,7 +200,7 @@ namespace Arbitra.Background.MatchFinders
                     else if (type == "2")
                     {
                         recognitionTeam2 = outcome["longName"].AsValue().ToString();
-                        float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
+                        float floatOdd = outcome["odds"].GetValue<float>();
                         Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
@@ -216,7 +221,7 @@ namespace Arbitra.Background.MatchFinders
 
                     if (type == "0")
                     {
-                        float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
+                        float floatOdd = outcome["odds"].GetValue<float>();
                         Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
@@ -225,7 +230,7 @@ namespace Arbitra.Background.MatchFinders
                     else if (type == "1")
                     {
                         recognitionTeam1 = outcome["longName"].AsValue().ToString();
-                        float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
+                        float floatOdd = outcome["odds"].GetValue<float>();
                         Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
@@ -234,7 +239,7 @@ namespace Arbitra.Background.MatchFinders
                     else if (type == "2")
                     {
                         recognitionTeam2 = outcome["longName"].AsValue().ToString();
-                        float floatOdd = float.Parse(outcome["odds"].AsValue().ToString());
+                        float floatOdd = outcome["odds"].GetValue<float>();
                         Odd odd = new Odd(_bettingShopName, referencePath, floatOdd); // add reference URL
                         List<Odd> oddList = new List<Odd>();
                         oddList.Add(odd);
@@ -251,7 +256,16 @@ namespace Arbitra.Background.MatchFinders
         public JsonNode? GetNodeFromUrl(HttpClient httpClient, string jsonUrl)
         {
             var response = httpClient.GetAsync(jsonUrl).Result;
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not load url: " + jsonUrl);
+                Console.WriteLine(e.ToString());
+                return null;
+            }
             string jsonString = response.Content.ReadAsStringAsync().Result;
             var finalJson = JsonNode.Parse(jsonString);
 
@@ -287,7 +301,7 @@ namespace Arbitra.Background.MatchFinders
             }
         }
             
-        public void ScrollDown(IWebDriver driver, WebDriverWait wait)
+        private void ScrollDown(IWebDriver driver, WebDriverWait wait)
         {
             IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
         
@@ -317,7 +331,7 @@ namespace Arbitra.Background.MatchFinders
             }
         }
         
-        public ListOfMatches FindListOfMatches(IWebDriver driver)
+        private ListOfMatches FindListOfMatches(IWebDriver driver)
         {
             var matchesElements = driver.FindElements(matchElementPath);
             ListOfMatches listOfMatches = new ListOfMatches();

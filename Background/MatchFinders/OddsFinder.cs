@@ -13,44 +13,34 @@ namespace Arbitra.Background.MatchFinders
         {
             List<IMatchFinder> matchFinders = new List<IMatchFinder>();
             
-            // matchFinders.Add(new BetanoMatchFinder());
+            // matchFinders.Add(nNormalizeStringew BetanoMatchFinder());
             // matchFinders.Add(new TipsportMatchFinder());
             matchFinders.Add(new FortunaMatchFinder());
             // matchFinders.Add(new SynottipMatchFinder());
-
-            Console.WriteLine(Directory.GetCurrentDirectory());
-
-            // string geckoDriverDirectory = @"Drivers/geckodriver-v0.36.0-linux-aarch64";
-            string geckoDriverDirectory = @"./Drivers";
-
-            var firefoxOptions = new FirefoxOptions();
-            // firefoxOptions.AddArgument("--headless");
-            firefoxOptions.SetPreference("devtools.console.stdout.content", true);
-            // firefoxOptions.SetLoggingPreference(LogType.Browser, LogLevel.All);
-            
-            var options = new ChromeOptions();
-            // This is the most important line to bypass detection
-            options.AddArgument("--disable-blink-features=AutomationControlled");
-
-            // Remove the "controlled by automated software" notification
-            options.AddExcludedArgument("enable-automation");
-            options.AddAdditionalOption("useAutomationExtension", false);
-
-            TimeSpan commandTimeOut = TimeSpan.FromSeconds(600);
+            matchFinders.Add(new KingsbetMatchFinder());
             
             ListOfMatches finalListOfMatches = new ListOfMatches();
             
             foreach (var matchFinder in matchFinders)
             {
                 // var listOfMatches = matchFinder.FindAllMatchesSelenium(geckoDriverDirectory, options , commandTimeOut);
-                var listOfMatches = matchFinder.FindAllMatchesApi();
-                finalListOfMatches.Merge(listOfMatches);
+                var matches = matchFinder.FindAllMatchesApi();
+                finalListOfMatches.Merge(matches);
             }
+            
+            //Saving and retrieving final list of matches so as to debug split to events method without web crawling
+            string jsonListOfMatches = JsonSerializer.Serialize<ListOfMatches>(finalListOfMatches);
+            File.WriteAllText(@"wwwroot/Data/Matches.json", jsonListOfMatches);
 
+            // string readJsonListOfMatches = File.ReadAllText(@"wwwroot/Data/Matches.json");
+            // ListOfMatches? listOfMatches = JsonSerializer.Deserialize<ListOfMatches>(readJsonListOfMatches);
+            // if (listOfMatches == null) return;
+            
+            
             List<Event> finalListOfEvents = finalListOfMatches.SplitToEvents();
             finalListOfEvents.Sort((a, b) => a.BestImpliedProbability.CompareTo(b.BestImpliedProbability));
-            var listOfEvents = finalListOfEvents.Take(500);
-            string json = JsonSerializer.Serialize<IEnumerable<Event>>(listOfEvents);
+            // var listOfEvents = finalListOfEvents.Take(500);
+            string json = JsonSerializer.Serialize<IEnumerable<Event>>(finalListOfEvents);
             File.WriteAllText(@"wwwroot/Data/BettingOdds.json", json);
             //https://stackoverflow.com/questions/16921652/how-to-write-a-json-file-in-c
         }

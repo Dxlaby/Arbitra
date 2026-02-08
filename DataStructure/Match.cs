@@ -1,4 +1,6 @@
-﻿namespace Arbitra.DataStructure
+﻿using Newtonsoft.Json;
+
+namespace Arbitra.DataStructure
 {
     public class Match
     {
@@ -15,13 +17,14 @@
             Date = date;
             Odds = new MatchOdds(odds);
         }
-        public Match(string name, string recognitionTeamName1, string recognitionTeamName2, DateTime date, MatchOdds matchOdds)
+        
+        public Match(string name, string recognitionTeamName1, string recognitionTeamName2, DateTime date, MatchOdds odds)
         {
             Name = name;
             RecognitionTeamName1 = NormalizeString(recognitionTeamName1);
             RecognitionTeamName2 = NormalizeString(recognitionTeamName2);
             Date = date;
-            Odds = matchOdds;
+            Odds = odds;
         }
 
         public void Merge(Match match)

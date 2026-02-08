@@ -48,12 +48,14 @@ namespace Arbitra.DataStructure
                     odds.Add(OddsTable[0]);
                     odds.Add(OddsTable[1]);
 
-                    float bestImpliedProbability = GetBestImpliedProbability(odds);
-                    float bestProfitPercentage = GetBestProfitPercentage(odds);
-                    
-                    Event newEvent = new Event(name, teamName1,  teamName2,
-                        bestImpliedProbability, bestProfitPercentage, date.ToString("d. M. H:mm"), odds);
-                    events.Add(newEvent);
+                    float? bestImpliedProbability = GetBestImpliedProbability(odds);
+                    float? bestProfitPercentage = GetBestProfitPercentage(odds);
+                    if (bestImpliedProbability != null && bestProfitPercentage != null)
+                    {
+                        Event newEvent = new Event(name, teamName1,  teamName2,
+                            bestImpliedProbability.Value, bestProfitPercentage.Value, date.ToString("d. M. H:mm"), odds);
+                        events.Add(newEvent);
+                    }
                 }
             }
             else if (OddsTable.Length == 6)
@@ -65,26 +67,30 @@ namespace Arbitra.DataStructure
                     odds.Add(OddsTable[0]);
                     odds.Add(OddsTable[1]);
                     odds.Add(OddsTable[2]);
-
-                    float impliedProbability = GetBestImpliedProbability(odds);
-                    float profitPercentage = GetBestProfitPercentage(odds);
                     
-                    Event newEvent = new Event(name, teamName1,  teamName2,
-                        impliedProbability, profitPercentage, date.ToString("d. M. H:mm"), odds);                    
-                    events.Add(newEvent);
+                    float? bestImpliedProbability = GetBestImpliedProbability(odds);
+                    float? bestProfitPercentage = GetBestProfitPercentage(odds);
+                    if (bestImpliedProbability != null && bestProfitPercentage != null)
+                    {
+                        Event newEvent = new Event(name, teamName1,  teamName2,
+                            bestImpliedProbability.Value, bestProfitPercentage.Value, date.ToString("d. M. H:mm"), odds);
+                        events.Add(newEvent);
+                    }
                 }
                 if (OddsTable[0] != null && OddsTable[4] != null)
                 {
                     List<Odds> odds = new List<Odds>();
                     odds.Add(OddsTable[0]);
                     odds.Add(OddsTable[4]);
-
-                    float impliedProbability = GetBestImpliedProbability(odds);
-                    float profitPercentage = GetBestProfitPercentage(odds);
                     
-                    Event newEvent = new Event(name, teamName1,  teamName2,
-                        impliedProbability, profitPercentage, date.ToString("d. M. H:mm"), odds);                    
-                    events.Add(newEvent);
+                    float? bestImpliedProbability = GetBestImpliedProbability(odds);
+                    float? bestProfitPercentage = GetBestProfitPercentage(odds);
+                    if (bestImpliedProbability != null && bestProfitPercentage != null)
+                    {
+                        Event newEvent = new Event(name, teamName1,  teamName2,
+                            bestImpliedProbability.Value, bestProfitPercentage.Value, date.ToString("d. M. H:mm"), odds);
+                        events.Add(newEvent);
+                    }
                 }
                 if (OddsTable[1] != null && OddsTable[5] != null)
                 {
@@ -92,12 +98,14 @@ namespace Arbitra.DataStructure
                     odds.Add(OddsTable[1]);
                     odds.Add(OddsTable[5]);
 
-                    float impliedProbability = GetBestImpliedProbability(odds);
-                    float profitPercentage = GetBestProfitPercentage(odds);
-                    
-                    Event newEvent = new Event(name, teamName1,  teamName2,
-                        impliedProbability, profitPercentage, date.ToString("d. M. H:mm"), odds);
-                    events.Add(newEvent);
+                    float? bestImpliedProbability = GetBestImpliedProbability(odds);
+                    float? bestProfitPercentage = GetBestProfitPercentage(odds);
+                    if (bestImpliedProbability != null && bestProfitPercentage != null)
+                    {
+                        Event newEvent = new Event(name, teamName1,  teamName2,
+                            bestImpliedProbability.Value, bestProfitPercentage.Value, date.ToString("d. M. H:mm"), odds);
+                        events.Add(newEvent);
+                    }
                 }
                 if (OddsTable[2] != null && OddsTable[3] != null)
                 {
@@ -105,33 +113,36 @@ namespace Arbitra.DataStructure
                     odds.Add(OddsTable[2]);
                     odds.Add(OddsTable[3]);
 
-                    float impliedProbability = GetBestImpliedProbability(odds);
-                    float profitPercentage = GetBestProfitPercentage(odds);
-                    
-                    Event newEvent = new Event(name, teamName1,  teamName2,
-                        impliedProbability, profitPercentage, date.ToString("d. M. H:mm"), odds);
-                    events.Add(newEvent);
+                    float? bestImpliedProbability = GetBestImpliedProbability(odds);
+                    float? bestProfitPercentage = GetBestProfitPercentage(odds);
+                    if (bestImpliedProbability != null && bestProfitPercentage != null)
+                    {
+                        Event newEvent = new Event(name, teamName1,  teamName2,
+                            bestImpliedProbability.Value, bestProfitPercentage.Value, date.ToString("d. M. H:mm"), odds);
+                        events.Add(newEvent);
+                    }
                 }
             }
             
             return events;
         }
 
-        private float GetBestImpliedProbability(List<Odds> odds)
+        private float? GetBestImpliedProbability(List<Odds> odds)
         {
             float impliedProbability = 0;
             foreach (Odds odd in odds)
             {
+                if (odd.BettingOdds[0].BettingOdd == 0) return null;
                 impliedProbability += 1 / odd.BettingOdds[0].BettingOdd; //the [0] is to find maximum implied probability this event has
             }
             
             return impliedProbability;
         }
         
-        public float GetBestProfitPercentage(List<Odds> odds)
+        public float? GetBestProfitPercentage(List<Odds> odds)
         {
-            float profitPercentage = (1 / GetBestImpliedProbability(odds) - 1) * 100;
-            return (float)Math.Round(profitPercentage, 2);
+            float? profitPercentage = (1 / GetBestImpliedProbability(odds) - 1) * 100;
+            return profitPercentage;
         }
         
     }

@@ -12,6 +12,11 @@ namespace Arbitra.DataStructure
             BettingOdds = bettingOdds;
         }
         
+        public static Odds FromSingle(string shop, string url, float value)
+        {
+            return new Odds(new List<Odd> { new Odd(shop, url, value) });
+        }
+        
         public void Sort()
         {
             BettingOdds.Sort(delegate(Odd odd, Odd odd1)
