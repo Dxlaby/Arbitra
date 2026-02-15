@@ -2,12 +2,19 @@
 @using Arbitra.DataStructure;
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using System.Text.Json
+@inject ScraperStatus Status
 @{
     ViewData["Title"] = "Arbitra";
 }
 
 <link rel="stylesheet" href="~/css/index.css" />
 
+<div class="status-indicator">
+    @if (Status.IsRunning)
+    {
+        <p class="everything-loaded"> --- Momentálně se vyhledávají nové zápasy. Program se spustil v @Status.LastRunStarted?.ToString("HH:mm"). --- </p>
+    }
+</div>
 <div class="event-grid">
     
 </div>

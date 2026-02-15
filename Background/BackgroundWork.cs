@@ -7,28 +7,36 @@ namespace Arbitra.Background
     public class BackgroundWork : BackgroundService
     {
         readonly ILogger<BackgroundWork> _logger;
+        private readonly ScraperStatus _status;
 
-        public BackgroundWork(ILogger<BackgroundWork> logger)
+        public BackgroundWork(ILogger<BackgroundWork> logger, ScraperStatus status)
         {
             _logger = logger;
+            _status = status;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
                 string timeInfo = "od ";
-                timeInfo += DateTime.Now.ToString("d. M. H:mm");
                 
+                _status.IsRunning = true; 
+                _status.LastRunStarted = DateTime.Now;
                 OddsFinder oddsFinder = new OddsFinder();
                 oddsFinder.FindOdds();
-                
-                timeInfo += "\ndo ";
-                timeInfo += DateTime.Now.ToString("d. M. H:mm");
-                // File.WriteAllText(@"wwwroot/Data/LastLoaded.txt", timeInfo);
+                _status.IsRunning = false;
                 
                 await Task.Delay(TimeSpan.FromHours(8));
             }
         }
+    }
+    
+    public class ScraperStatus
+    {
+        public bool IsRunning { get; set; }
+        public DateTime? LastRunStarted { get; set; }
     }
 }

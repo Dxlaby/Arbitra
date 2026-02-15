@@ -20,6 +20,7 @@ builder.Host.UseSystemd(); //https://stackoverflow.com/questions/71233335/use-sy
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddHostedService<BackgroundWork>();
 builder.Services.AddTransient<OddsFinder>();
+builder.Services.AddSingleton<ScraperStatus>();
 
 var app = builder.Build();
 

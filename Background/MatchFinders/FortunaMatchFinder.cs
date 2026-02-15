@@ -264,6 +264,7 @@ namespace Arbitra.Background.MatchFinders
             {
                 Console.WriteLine("Could not load url: " + jsonUrl);
                 Console.WriteLine(e.ToString());
+                
                 return null;
             }
             string jsonString = response.Content.ReadAsStringAsync().Result;
