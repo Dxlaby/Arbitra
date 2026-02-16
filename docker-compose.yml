@@ -6,4 +6,4 @@
       dockerfile: Dockerfile
     container_name: arbitra-container
     ports:
-      - "8080:80"
+      - "8080:8080"
