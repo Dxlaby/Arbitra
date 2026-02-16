@@ -1,0 +1,6 @@
+﻿services:
+  arbitra:
+    image: arbitra
+    build:
+      context: .
+      dockerfile: Dockerfile
