@@ -1,6 +1,9 @@
 ﻿services:
   arbitra:
-    image: arbitra
+    image: arbitra-web-app
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: arbitra-container
+    ports:
+      - "8080:80"
