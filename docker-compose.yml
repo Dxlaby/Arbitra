@@ -6,6 +6,6 @@
       dockerfile: Dockerfile
     container_name: arbitra-container
     volumes:
-      - ./wwwroot/Data:/app/wwwroot/Data/BettingOdds.json
+      - ./wwwroot/Data:/app/wwwroot/Data
     ports:
       - "8080:8080"

@@ -24,8 +24,10 @@ namespace Arbitra.Background
                 _status.IsRunning = true; 
                 TimeZoneInfo pragueZone = TZConvert.GetTimeZoneInfo("Europe/Prague");
                 DateTime utcNow =  DateTime.UtcNow;
+                Console.WriteLine();
+                Console.WriteLine("Utctime: " + utcNow.ToString("yyyy-MM-dd HH:mm:ss"));
                 _status.LastRunStarted = TimeZoneInfo.ConvertTimeFromUtc(utcNow, pragueZone);
-                
+                Console.WriteLine("Praugetime " + _status.LastRunStarted );
                 OddsFinder oddsFinder = new OddsFinder();
                 try 
                 {
