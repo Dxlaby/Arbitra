@@ -98,7 +98,7 @@ namespace Arbitra.Background.MatchFinders
                 string recognitionTeam2 = competitorsDic[recognitionTeamIds[1]];
                 string name = recognitionTeam1 + " - " + recognitionTeam2;
                 string dateString = sprtEvent["startDate"].GetValue<string>();
-                DateTime startDate = DateTime.Parse(dateString);
+                DateTime startDate = DateTime.Parse(dateString, null, System.Globalization.DateTimeStyles.AdjustToUniversal); // Always returns UTC time
                 string eventId = sprtEvent["id"].GetValue<long>().ToString();
                 string referenceLink = _referenceUrl + eventId;
                 long[] marketIds = sprtEvent["marketIds"].AsArray()

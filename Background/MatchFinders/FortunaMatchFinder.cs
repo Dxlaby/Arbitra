@@ -140,7 +140,6 @@ namespace Arbitra.Background.MatchFinders
                     string path = tourPathId.Item1 + matchSeoName + "?filter=all&tab=offer";
                     long startDateTimeInt64 = startDateTimeRaw.GetValue<long>();
                     DateTime startDateTime = DateTimeOffset.FromUnixTimeMilliseconds(startDateTimeInt64).DateTime;
-                    startDateTime = startDateTime.AddHours(1);
 
                     Tuple<string, string, DateTime> matchPathIdDate = 
                         new Tuple<string, string, DateTime>(path, matchId, startDateTime );
@@ -148,6 +147,8 @@ namespace Arbitra.Background.MatchFinders
                 }
             }
 
+            
+            
             return matchPathIdDateList;
         }
 

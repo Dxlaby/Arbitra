@@ -13,7 +13,7 @@ namespace Arbitra.DataStructure
         public string RecognitionTeamName2 { get; set; }
         public float BestImpliedProbability { get; set; }
         public float BestProfitPercentage { get; set; }
-        public string Date { get; set; }
+        public string Date { get; set; } // in Eastern Europe time
         public List<Odds> SetOfOdds { get; set; }
         //Set of odds are odds, where exactly one outcome will happen
         //public string UrlReference { get; set; }

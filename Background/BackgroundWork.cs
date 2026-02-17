@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Arbitra.Background.MatchFinders;
 using Arbitra.DataStructure;
-
+using TimeZoneConverter;
 namespace Arbitra.Background
 {
     public class BackgroundWork : BackgroundService
@@ -22,7 +22,10 @@ namespace Arbitra.Background
             while (!stoppingToken.IsCancellationRequested)
             {
                 _status.IsRunning = true; 
-                _status.LastRunStarted = DateTime.Now;
+                TimeZoneInfo pragueZone = TZConvert.GetTimeZoneInfo("Europe/Prague");
+                DateTime utcNow =  DateTime.UtcNow;
+                _status.LastRunStarted = TimeZoneInfo.ConvertTimeFromUtc(utcNow, pragueZone);
+                
                 OddsFinder oddsFinder = new OddsFinder();
                 try 
                 {
