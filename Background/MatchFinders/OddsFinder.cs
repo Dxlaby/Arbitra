@@ -23,19 +23,9 @@ namespace Arbitra.Background.MatchFinders
             
             foreach (var matchFinder in matchFinders)
             {
-                // var listOfMatches = matchFinder.FindAllMatchesSelenium(geckoDriverDirectory, options , commandTimeOut);
                 var matches = matchFinder.FindAllMatchesApi();
                 finalListOfMatches.Merge(matches);
             }
-            
-            //Saving and retrieving final list of matches so as to debug split to events method without web crawling
-            string jsonListOfMatches = JsonSerializer.Serialize<ListOfMatches>(finalListOfMatches);
-            File.WriteAllText(@"wwwroot/Data/Matches.json", jsonListOfMatches);
-
-            // string readJsonListOfMatches = File.ReadAllText(@"wwwroot/Data/Matches.json");
-            // ListOfMatches? listOfMatches = JsonSerializer.Deserialize<ListOfMatches>(readJsonListOfMatches);
-            // if (listOfMatches == null) return;
-            
             
             List<Event> finalListOfEvents = finalListOfMatches.SplitToEvents();
             finalListOfEvents.Sort((a, b) => a.BestImpliedProbability.CompareTo(b.BestImpliedProbability));
