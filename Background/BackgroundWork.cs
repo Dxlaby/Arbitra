@@ -21,15 +21,20 @@ namespace Arbitra.Background
             
             while (!stoppingToken.IsCancellationRequested)
             {
-                string timeInfo = "od ";
-                
                 _status.IsRunning = true; 
                 _status.LastRunStarted = DateTime.Now;
                 OddsFinder oddsFinder = new OddsFinder();
-                oddsFinder.FindOdds();
+                try 
+                {
+                    await Task.Run(() => new OddsFinder().FindOdds(), stoppingToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    break; 
+                }               
                 _status.IsRunning = false;
                 
-                await Task.Delay(TimeSpan.FromHours(8));
+                await Task.Delay(TimeSpan.FromHours(8), stoppingToken); // stopping token so that it can be stopped
             }
         }
     }
