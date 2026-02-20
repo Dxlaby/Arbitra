@@ -9,7 +9,10 @@
 \usepackage{array}
 \usepackage{listings}
 \let\openright=\cleardoublepage
-
+\lstset{
+	columns=fixed,
+	basewidth=0.5em % Decrease this value to make horizontal space smaller
+}
 \input{macros}
 
 \def\NazevPrace{Arbitra}
@@ -195,70 +198,106 @@ Na rozdíl od předchozího případu jsou součástí POST requestu data; jedn�
 
 \chapter{Implementace}
 
-V této části uvedu, jak jsem nalezl vhodné GET mteody, přes které se posílají kurzy. 
+V této části uvedu, jak jsem nalezl vhodné GET mteody, přes které se posílají kurzy.  Taktéž vysvětlím jak funguje databáze ukládání zápasů a jak kód rozpoznává stejné zápasy.
 
 \section{Nalézání vhodných GET metod}
-Jak již bylo zmíněno v minulé části, většina webových stránek komunikuje se svým serverem skrze API. Tuto komunikaci lze vidět i v prohlížeči za pomocí Inspect tool. Následně popíšu, jak lze tuto komunikaci vidět v prohlížeči Firefox, přestože ostatní prohlížeče typu Google Chrome budou fungovat na velmi podobném počítači.
+Jak již bylo zmíněno v minulé části, většina webových stránek komunikuje se svým serverem skrze API. Tuto komunikaci lze vidět i v prohlížeči za pomocí Inspect tool. Následně popíšu, jak lze tuto komunikaci vidět v prohlížeči Firefox. Ostatní prohlížeče typu Google Chrome budou fungovat velmi podobně.
 
 Po otevření dané stránky, kterou chceme prohledat klikneme kdekoliv na stránce pravým tlačítkem myši a zvolíme možnost Inspect. Následně v horní liště zvolíme Network, čímž uvidíme celou následující komunikaci mezi serverem a stránkou. Tedy předchozí requesty tam nevidíme. Otevření Network lišty lze také docílit za pomocí zkratky Ctrl + Shift + E. 
 
-Poté musíme znovu načíst webovou stránku a počkáme, až se načtou všechny potřebné data, což jsou v našem případě kurzy. Následně zastavíme další záznam komunikace skrze tlačítko Pause s ikonoou II (viz. Obr.), aby se nám do toho nepletly např. requesty pro live sázky, které se každou chvílí aktualizují. Nyní vidíme všechnu komunikaci, přes kterou by se mohly kurzy posílat. 
+Poté musíme znovu načíst webovou stránku a počkáme, až se načtou všechny potřebné data, což jsou v našem případě kurzy. Následně zastavíme další záznam komunikace skrze tlačítko Pause s ikonoou II, aby se nám do toho nepletly např. requesty pro live sázky, které se každou chvílí aktualizují. Nyní vidíme všechnu komunikaci, přes kterou by se mohly kurzy posílat (viz. Obr. \ref{fig:fortuna_inspect_network}).
 
-Nejjednodušší případ se stává, když se zápasy posílají skrze Get metodu ve formátu JSON, který není jakkoliv kódovaný. Jak jsem zjistil, tak sázkové kanceláře Fortuna a Kingsbet využívají přesně tuhle metodu a tedy ukážu pouze co dělat v tomhle případě. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/Fortuna.png} 
+	\caption{ifortuna.cz s otevřenou network lištou.}
+	\label{fig:fortuna_inspect_network}
+\end{figure}
 
-Následně zaklikneme, že chceme vidět pouze XHR - XMLHttpRequest, čímž se nám zobrazí pouze requesty, který vrací nějakou strukturu dat. (VYSVĚTLIT LÍP) Dále tedy musíme prozkoumat každý z těchto requestů. Někdy mohou být pojmenovány tak, že jde poznat o co jde (např. GetEvents), ale nelze na to spoléhat. 
+Nejjednodušší případ se stává, když se zápasy posílají skrze GET request ve formátu JSON, který není jakkoliv kódovaný. Jak jsem zjistil, tak sázkové kanceláře Fortuna a Kingsbet využívají přesně tuhle metodu a tedy ukážu pouze co dělat v tomhle případě. 
 
-Když člověk klikne pravým tlačítkem myši na daný request a klikne na open in new tab, uvidí JSON formát, který z daného requestu dostanu a taky adresu, přes kterou request udělá. Pokud tímto způsobem rozkliknu několik requestů, které se podle jména zdají relevantní, uvidím několik souborů ve kterých musím nalézt systém jak fungují. Neexistuje jednoznačná metoda jak lze tento systém nazpátek zjistit, ovšem ukážu jak jsem ho zjistil u Fortuny a Kingsbetu, přičemž u ostatních kanceláří lze pravděpodobně dosáhnout stejného výsledku podobnou metodou, přestože to není zaručené.
+Následně zaklikneme, že chceme vidět pouze XHR - XMLHttpRequest, což je request, kterým se nejčastěji posílají data. (VYSVĚTLIT LÍP) Dále tedy musíme prozkoumat každý z těchto requestů. Někdy mohou být pojmenovány tak, že jde poznat o co jde (např. GetEvents), ale nelze na to spoléhat. 
+
+Když člověk klikne pravým tlačítkem myši na daný request a klikne na open in new tab, uvidí JSON formát, který z daného requestu dostanu a taky adresu, přes kterou request udělá. Pokud tímto způsobem rozkliknu několik requestů, které se podle jména zdají relevantní, uvidím několik souborů ve kterých musím nalézt systém jak fungují. Neexistuje jednoznačná metoda jak lze tento systém nazpátek zjistit, ovšem ukážu jak jsem ho zjistil u Fortuny, přičemž u ostatních kanceláří lze pravděpodobně dosáhnout stejného výsledku podobnou metodou, přestože to není zaručené.
+
+Po rozklikuntí několik requestů si doporučuju napsat nějaký základní infomrace o jednom konkrétní zápase (např. název, kurzy) a hledat je v těch dat. Touto metodou jsem zjistil, že data o zápasech jsou v requestu na téhle url:
+
+\begin{quote}
+ api.ifortuna.cz/offer/markets/api/v1\_0/fixture/[id\_zapasu]/markets/overview
+	
+api.ifortuna.cz/offer/markets/api/v1\_0/fixture/ufo:mtch:1qf-02p/markets/overview
+	
+\end{quote} 
+
+Dalším hledáním jsem našel  request, kde se nachází ID zápasů:
+
+\begin{quote}
+/offer/structure/api/v1\_0/tournament/[id\_turnaje]/matches?timeFilter=all
+	
+/offer/structure/api/v1\_0/tournament/ufo:tour:0i-00d/matches?timeFilter=all
+\end{quote}
+
+
  
  
-\includegraphics[width=\textwidth]{img/Fortuna.png} 
+Pokračováním zjistím, že ID turnamentů se nachází v tomto requestu:
 
-\section{Jak získat GET metodu v C\#}
-Všechny soubory, které extrahují data z externích webů se nachází ve složce ./Background/MatchFinders. Soubor, který je spouští je OddsFinder.cs
+\begin{quote}
+/offer/structure/api/v1\_0/sport/[id\_sportu]/tournaments?timeFilter=all
+	
+/offer/structure/api/v1\_0/sport/ufo:sprt:0i/tournaments?timeFilter=all
+\end{quote}
+ 
+ A že ID všech možných sportů se nachází v tomto requestu
+ 
+\begin{quote}
+/offer/structure/api/v1\_0/sports?timeFilter=all
+ \end{quote}
+ 
+Tedy výsledný kód bude fungovat tak, že si řekne o všechny ID sportů, pak o všechny ID turnajů, poté o všechny ID zápasů a následně tyto zápasy přetransformuje do mojí struktury. 
+ 
+ \section{Jak získat GET metodu v C\#}
+Všechny soubory, které extrahují data z externích webů se nachází ve složce ./Background/MatchFinders a jsou spouštěny v souboru OddsFinder.cs
 
-V .NET prostředí lze využít objektu HttpClient, který umožňuje získat Get request na základě webové adresy. A to za pomocí GetAsync() metody. V rámci projektu jsem vytvořil funkci, která získává JsonNode z URL viz. Zde. 
+V .NET prostředí lze využít objektu HttpClient, který umožňuje získat GET request na základě webové adresy to za pomocí GetAsync() metody. Následně jsem z odpovědi vytvořil JsonNode objekt. Tato metoda je zde  Arbitra.Background.MatchFinders.KingsbetMatchFinder.GetNodeFromUrl a zde Arbitra.Background.MatchFinders.FortunaMatchFinder.GetNodeFromUrl.
 
-Pro Kingsbet bylo potřeba obejít základní detekci proti robotům, což se vyřešilo přidáním request headrů pro všechny request. Viz kód 
-
+K requestům na webovou stránku Kingsbet bylo potřeba dát header, protože bez něj nedával odpovědi požadavkům.
 
 \section{Struktura ukládání dat}
 Všechny soubory, které tvoří strukturu ukládání zápasů, jsou ve složce ./Data Structure.
 
-V rámci projektu jsem sbíral kurzy pouze na zápasy a to jenom na vítěze zápasu, případně na dvojtip (neprohra týmu). Obecná struktura všech událostí je mnohem složitější na uspořádání a tedy není implementovaná v mém projektu.
+V rámci projektu jsem sbíral kurzy pouze na zápasy a to jenom na vítěze zápasu, případně na dvojtip (neprohra týmu nebo absence remízy). Obecná struktura všech událostí je mnohem složitější na uspořádání a tedy není implementovaná v mém projektu. Zde uvádím jednotlivé třídy a jejich využití:
 
-Match - Když se hledají zápasy, tak se ukládají podle této třídy, která obsahuje jméno zápasu, jméno týmu A, jméno týmu B, datum zápasu a tabulku kurzů, kde pro každý výsledek jsou uvedeny všechny různé kanceláře s kurzem a odkazem na zápas. Zároveň obsahuje funkci Merge, která spojí dva stejné zápasy do jednoho, aby objekt obsahoval informace o všech sázkových kanceláří.
+Match - Když se hledají zápasy, tak se ukládají podle této třídy, která obsahuje jméno zápasu, jméno týmu A, jméno týmu B, datum zápasu a tabulku kurzů, která se ukládá jako pole Odds. Zároveň obsahuje metodu Merge(), která spojuje dva stejné zápasy do jednoho, aby objekt obsahoval informace o všech sázkových kanceláří.
 
-ListOfMatches - list tříd Match s funkcí Merge(), která spojuje stejné zápasy, které najde v listu. Funkce SplitToEvents() (která se nachází i ve třídě Match) rozděluje zápasy na několik objektů třídy Event. 
+ListOfMatches - list tříd Match s funkcí Merge(), která spojuje stejné zápasy, které najde v listu. Obsahuje metodu SplitToEvents() (stejně jako třída Match), která rozděluje zápasy na několik objektů třídy Event. 
 
 Event - podobná struktura jako Match, ale může se stát pouze jeden výsledek z uvedených kurzů. Zároveň lze získat profit ze sázení na tyto události podle vzorců uvedených v motivaci. Taktéž lze tuto třídu serializovat a deserializovat do JSON objektu.
 
-MatchOdds - jako Odds, ale s funkcí merge, která spojí dvě stejné 
+Odd - kurz na konkrétní výsledek vypsaný konkrétní sázkovou kanceláří. Obsahuje kurz, sázkovou kancelář, která kurz vypisuje, a odkaz na zápas. 
 
-Odd - kurz na konkrétní výsledek vypsaný konkrétní sázkovou kanceláří. Obsahuje kurz, sázkovou kanceláří, která kurz vypisuje, a odkaz na zápas. 
+Odds - list tříd Odd, který uchovává všechny možné kurzy na jeden konkrétní výsledek zápasu. Obsahuje funkci Sort(), která seřadí kurzy od největšího po nejmenší.
 
-Odds - list tříd Odd, který uchovává všechny možné kurzy na jeden konkrétní výsledek zápasu. Obsahuje funkci Sort(), která seřadí kurzy od největšího.
-
+MatchOdds - podobná třída jako Odds, ale s metodou Merge(), která sloučí třídy Odds, které reprezentují kurzy na stejné výsledky stejného zápasu.  
 
 
 \section{Rozpoznání stejných zápasů}
-Ze zápasů jsem sbíral jména týmů a datum. Protože kanceláře mohou využívat jiný formát názvu týmu, rozhodl jsem se, že každý tým nazvu zkrácenou verzí, kterou vytváří funkce NormalizeString() v souboru /DataStructure/Match.cs.  Zároveň v tom stejném souboru funkce IsSame definuje, kdy jsou oba zápasy stejné. Aby byly, musí platit následující
+Ze zápasů jsem sbíral jména týmů a datum. Protože kanceláře mohou využívat jiný formát názvu týmu, rozhodl jsem se, že každý tým nazvu zkrácenou verzí, kterou vytváří metoda NormalizeString() v souboru /DataStructure/Match.cs.  Zároveň v tom stejném souboru metoda IsSame() definuje, kdy jsou oba zápasy stejné. Aby byly, musí platit následující
 \begin{enumerate}
 \item Zkrácený název prvního týmu prvního zápasu je obsažen ve zkráceném názvu prvního týmu ve druhém zápasu, nebo naopak.\\
 \item Zkrácený název druhého týmu prvního zápasu je obsažen ve zkráceném názvu druhého týmu ve druhém zápasu, nebo naopak.\\
 \item Počet možností, jak zápas může skončit je stejný.\\
 \item Čas, kdy se zápasy konají jsou stejné.\\
 \end{enumerate}
-Tento systém rozpoznání stejných zápasů je naprosto arbitrární a nezaručuje naprostou úspěšnost. Kvůli identitě času konání je pravděpodobnost na neúspěšnost relativně malá, ovšem pro budoucí vývoj je potřeba vymyslet více robustní metodu.
+Tento systém rozpoznání stejných zápasů je naprosto arbitrární a nezaručuje stoprocentní úspěšnost. Kvůli identitě času konání je pravděpodobnost na neúspěšnost relativně malá, ovšem pro budoucí vývoj je potřeba vymyslet více robustní metodu.
 
 \section{Uživatelské rozhraní}
-Jakožto uživatelské rozhraní jsem si vybral webovou stránku naprogramovanou v ASP.NET frameworku. Jedná se o populární a open source možnost jak tvořit webové stránky. Uživatel při otevření tohoto projektu tedy bude obeznámen s rozhraním pro něho známé, tj. rozhraní webových stránek, což je z mého pohledu přívětivější než rozhraní vlastní aplikace, případně výpisu z konzoly. Zároveň zakomponování tohoto projektu do webové stránky umožňuje budoucí uplatnění, pokud se někdy v budoucnu rozhodnu spouštět tento projekt na internet skrze server. 
+Jakožto uživatelské rozhraní jsem si vybral webovou stránku, kterou jsem programoval v ASP.NET frameworku. Jedná se o populární a open source framework na vytváření webových stránek. Uživatel při otevření mého projektu tedy bude obeznámen s rozhraním pro něho známé, tj. rozhraní webových stránek, což je z mého pohledu přívětivější než rozhraní vlastní aplikace, případně výpisu z konzoly. Zároveň zakomponování tohoto projektu do webové stránky umožňuje budoucí uplatnění, pokud se někdy v budoucnu rozhodnu spouštět tento projekt na internet skrze server. 
 
-Na hlavní stránce člověk uvidí všechny zápasy s primárními kurzy seřazené od nejvýdělečnějších kurzů, respektive od nejméně prodělečných. Daný kurz si člověk může rozkliknout, čímž se dostane na stránku daného zápasu dané sázkové kanceláře. Také si může rozkliknout zápas jako takový, čímž se dostane do Countru, který umožňuje spočítat, kolik na jaký kurz vsadit, aby byla sázka vždy stejně výnosná. 
-
-
+Na hlavní stránce uživatel vidí všechny zápasy s primárními kurzy seřazené od nejvýdělečnějších kurzů, respektive od nejméně prodělečných. Daný kurz si člověk může rozkliknout, čímž se dostane na stránku daného zápasu dané sázkové kanceláře. Také si může rozkliknout zápas jako takový, čímž se dostane do Countru, který umožňuje spočítat, kolik na jaký kurz vsadit, aby byla sázka vždy stejně výnosná. 
 
 \chapter{Technická dokumentace}
-Projekt byl vytvořen v ASP.NET frameworku a je v něm zakomponovaný dockerfile, čímž je umožněno ho spustit v docker containeru. K spuštění je potřeba mít nainstalovaný git a docker. Dále stačí naklonovat repozitář do svého počítače a spustit ho v dockeru. Na linuxu toho lze docílit s těmito commandy: \\
+Do projektu jsem zakomponoval dockerfile, který umožňuje spustit můj projekt v docker containeru. K spuštění je potřeba mít nainstalovaný git a docker. Dále stačí naklonovat repozitář do svého počítače a spustit ho v dockeru. Na linuxu toho lze docílit s těmito commandy: \\
 \\
 \begin{lstlisting}
 	git clone https://github.com/Dxlaby/Arbitra
@@ -268,11 +307,11 @@ Projekt byl vytvořen v ASP.NET frameworku a je v něm zakomponovaný dockerfile
 	sudo docker compose up --build
 \end{lstlisting}
 
-Stránka nyní bude běžet přes port :8080 a tedy stačí navštívit stránku http://localhost:8080, (nikoliv https) případně http://[ip\_adresa]:8080 pro všechny uživatele dané sítě. 
+Po spuštění bude stránka běžet přes port :8080 a tedy stačí navštívit stránku http://localhost:8080, (nikoliv https) případně http://[ip\_adresa]:8080 pro všechny ostatní uživatele na dané síti. 
 
-Po spuštění chvíli trvá, než stránka načte kurzy a tedy se tam pár minut žádné nezobrazují. Následně lze vidět zápasy seřazené podle největšího profitu, respektive nejnižší ztráty. Po rozkliknutí daného zápasu lze vidět tzv. counter, který spočítá na jaký kurz máte vsadit kolik, aby jste vždycky vyhráli, respektive prohráli, stejné množství peněz. Zároveň ukáže celkový profit.
+Po spuštění chvíli trvá, než stránka načte kurzy a tedy se tam pár minut žádné nezobrazují. Následně lze vidět zápasy seřazené podle největšího profitu, respektive nejnižší ztráty. Po rozkliknutí daného zápasu lze vidět tzv. Counter, který spočítá na jaký kurz máte vsadit kolik, aby jste vždycky vyhráli, respektive prohráli, stejné množství peněz. Zároveň ukáže celkový profit.
 
-V konzoli se možná vypíšou errory ohledně nedostupného requestu. Ty pouze informují uživatele o faktu, že se kód snažil získat request, který neexistuje. Nejčastěji z důvodu, že se nějaká hodnota chybně označila jako např. ID turnamentu, zápasu apod. Nejedná se ovšem o chybu, která by naznačovala nefunkční systém. 
+V konzoli se možná vypíšou errory ohledně nedostupného requestu. Ty pouze informují uživatele o faktu, že se kód snažil získat request, který neexistuje. Nejčastěji z důvodu, že se nějaká hodnota chybně označila za např. ID turnaje, zápasu apod. Díky tomu se snažil kód zíksat request, který neexistuje. Nejedná se ovšem o chybu, která by naznačovala nefunkční systém, spíš ukazuje na neúplně propracovaný kód. 
 
 
 

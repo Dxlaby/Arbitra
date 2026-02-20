@@ -1,16 +1,16 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
-[0] Config.pm:310> INFO - Logfile is 'main.blg'
-[255] biber:340> INFO - === Thu Feb 19, 2026, 14:30:27
-[297] Biber.pm:419> INFO - Reading 'main.bcf'
-[533] Biber.pm:979> INFO - Found 4 citekeys in bib section 0
-[557] Biber.pm:4419> INFO - Processing section 0
-[572] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
-[573] bibtex.pm:1713> INFO - LaTeX decoding ...
-[577] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[648] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[649] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
-[649] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'cs_CZ'
-[660] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[662] bbl.pm:763> INFO - Output to main.bbl
-[662] Biber.pm:131> WARN - BibTeX subsystem: /tmp/biber_tmp_ZY8n/33e59b5ca9ec342068223d604c3f8d55_5943.utf8, line 28, warning: 534 characters of junk seen at toplevel
-[662] Biber.pm:133> INFO - WARNINGS: 1
+[1] Config.pm:310> INFO - Logfile is 'main.blg'
+[198] biber:340> INFO - === Fri Feb 20, 2026, 19:39:58
+[248] Biber.pm:419> INFO - Reading 'main.bcf'
+[441] Biber.pm:979> INFO - Found 4 citekeys in bib section 0
+[476] Biber.pm:4419> INFO - Processing section 0
+[503] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
+[504] bibtex.pm:1713> INFO - LaTeX decoding ...
+[512] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[639] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[639] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
+[640] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'cs_CZ'
+[662] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[666] bbl.pm:763> INFO - Output to main.bbl
+[668] Biber.pm:131> WARN - BibTeX subsystem: /tmp/biber_tmp_rkWL/33e59b5ca9ec342068223d604c3f8d55_15762.utf8, line 28, warning: 534 characters of junk seen at toplevel
+[668] Biber.pm:133> INFO - WARNINGS: 1
