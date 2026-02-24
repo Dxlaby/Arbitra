@@ -130,6 +130,32 @@
       \verb https://www.geeksforgeeks.org/blogs/what-is-web-api-and-why-we-use-it/
       \endverb
     \endentry
+    \entry{wiki_xmlhttprequest}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{labelalpha}{Wik23}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{XMLHttpRequest}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://cs.wikipedia.org/wiki/XMLHttpRequest
+      \endverb
+      \verb{url}
+      \verb https://cs.wikipedia.org/wiki/XMLHttpRequest
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput
