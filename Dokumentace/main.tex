@@ -40,12 +40,12 @@ Děkuji panu učiteli Emilu Milerovi za jeho ochotu vést můj maturitní projek
 
 % Abstrakt česky
 \def\Abstrakt{%
-Abstrakt.
+Představme si, že dvě sázkové kanceláře vypíšou na jeden zápas natolik odlišné kurzy, že když vsadíme na jedné na jeden výsledek a na druhé opačný výsledek, budeme vždy v profitu, ať už zápas skončí jakkoli. Tento fenomén se opravdu děje a nazývá se arbitrážní sázka nebo surebet. Protože počet kurzů, které sázkové kanceláře vypisují, jsou tisíce, musíme hledání těchto profitujících sázek automatizovat. Přestože se jedná o vyřešený problém, většina těchto automatických vyhledávačů existuje for-profit. Proto jsem vytvořil tento projekt, který spolu s touto dokumentací představuje open-source alternativu ke stávajícím řešením. V rámci projektu jsem vytvořil kód, který extrahuje kurzy na výsledek zápasů z Fortuny a Kingsbetu, přičemž výsledné kurzy srovná, seřadí od nejprofitovanějších a vyobrazí na webové stránce, kterou kód spouští lokálně.
 }
 
 % Abstrakt anglicky
 \def\AbstraktEN{%
-Abstract.
+Let's imagine that two bookmakers offer such different odds on a single match that if we bet on one outcome with one bookmaker and the opposite outcome with the other, we will always make a profit, regardless of the outcome of the match. This phenomenon really does occur and is called arbitrage betting or sure betting. Since bookmakers offer thousands of odds, we need to automate the search for these profitable bets. Although this is a solved problem, most of these automatic search engines exist for profit. That is why I created this project, which, together with this documentation, represents an open-source alternative to existing solutions. As part of the project, I created code that extracts odds on match results from Fortuna and Kingsbet, compares the resulting odds, sorts them from the most profitable, and displays them on a website that the code runs locally.
 }
 
 % 3 až 5 klíčových slov
@@ -109,7 +109,7 @@ Vklad na $i$-tý kurz $V_i$ lze určit takto:
 
 \section{Existující řešení}
 
-Hledání surebetů není novinkou a v současnosti existuje několik webových stránek a projektů na platformě GitHub, které tuto službu poskytují. Ovšem nezahrnují všechny české sázkové kanceláře (tj. Tipsport, Chance, Fortuna, Betano, Allwyn, Synottip, Kingsbet, MerkurXtip) nebo jsou alespoň částečně placené. V následující tabulce uvádím šest takových webových stránek a sázkové kanceláře, ze kterých extrahují data. Také uvádím projekty na GitHubu, které se touto problematikou zabývají. Tyto projekty jsem vyhledával skrze vyhledávač Google, je tedy pravděpodobné, že jsem některé z nich mohl přehlédnout. Taktéž jsem netestoval jejich správnost. Zároveň se mi nepodařilo najít projekt na GitHubu, který by srovnával data z českých sázkových kanceláří a hledal arbitráže.
+Hledání surebetů není novinkou a v současnosti existuje několik webových stránek a projektů na platformě GitHub, které tuto službu poskytují. Ovšem nezahrnují všechny české sázkové kanceláře (tj. Tipsport, Chance, Fortuna, Betano, Allwyn, Synottip, Kingsbet, MerkurXtip) nebo jsou alespoň částečně placené. V následující tabulce uvádím šest takových webových stránek a sázkové kanceláře, ze kterých extrahují data. Také uvádím projekty na GitHubu, které se touto problematikou zabývají. Tyto projekty jsem vyhledával skrze vyhledávač Google a je tedy pravděpodobné, že jsem některé další mohl přehlédnout. Taktéž jsem netestoval jejich správnost. Zároveň se mi nepodařilo najít projekt na GitHubu, který by srovnával data z českých sázkových kanceláří a hledal arbitráže.
 
 \begin{table}[h]
 \centering
@@ -179,7 +179,7 @@ Hledání surebetů není novinkou a v současnosti existuje několik webových 
 
 Jak lze vidět z tabulky webových stránek nabízejících zmíněnou službu, většina z nich uplatňuje restrikci na zobrazení surebetů pro neplatící uživatele. Můj program samozřejmě nemůže konkurovat profesionálním placeným službám jako surebet.com, představuje však open-source alternativu, ke které lze přidat moduly na extrahování dalších stránek, a zároveň zaručuje bezplatnou dostupnost. Největší nevýhodu svého programu oproti alternativám spatřuji v tom, že není schopen rozpoznat arbitráž pro jiné události než základní výsledek zápasů. Výhodou spuštění vlastního programu na lokálním počítači je naopak fakt, že si mohu sám určit frekvenci extrakce, čímž se snižuje šance, že zobrazená data budou zastaralá. \\
 
-Pro svůj projekt jsem si vybral sázkové kanceláře Fortuna a Kingsbet, protože obě disponují API, které jsou snadno pochopitelné (viz následující část), a zároveň se na extrahování dat z Kingsbetu není open-source kód. Tento program jsem psal v programovacím jazyku C\#, protože jsem chtěl k extrakci zakomponovat rozhraní webové stránky, která se lépe programuje v ASP.NET frameworku, který existuje pouze pro C\#. Projekt by určitě šel udělat i v Pythonu, ale na větší projekty se podle mého uvážení nehodí. 
+Pro svůj projekt jsem si vybral sázkové kanceláře Fortuna a Kingsbet, protože obě disponují API, které jsou snadno pochopitelné (viz následující část), a zároveň se na extrahování dat z Kingsbetu není open-source kód. Tento program jsem psal v programovacím jazyku C\#, protože jsem chtěl k extrakci zakomponovat rozhraní webové stránky, která se velmi dobře programuje v ASP.NET frameworku, který existuje pouze pro C\#. Projekt by určitě šel udělat i v Pythonu, ale na větší projekty se podle mého uvážení nehodí. 
 
 \section{Metody sběru dat z webové stránky}
 Webové stránky vznikly za účelem vytvoření uživatelsky přívětivé a automatizované komunikace mezi uživatelem a organizací (např. firmou, univerzitou, školou atd.). V současné době se ustálil model, kdy si organizace pořídí nebo pronajme server a webovou adresu. Následně uživatel zadá danou adresu do prohlížeče a obdrží soubory od serveru, které se mu zobrazí jako webová stránka. Typicky obdrží HTML soubor se základní strukturou stránky, CSS soubory, které upravují vzhled HTML souboru, a JavaScriptové soubory, které definují interaktivní prvky stránky. Webové stránky dělíme na dva typy. \cite{gfg_webpage}\\
@@ -188,13 +188,13 @@ Pro jednoduchý přenos neměnných informací stačí takzvaná \textbf{statick
 
 Na složitější úkoly je potřeba využít tzv. \textbf{dynamickou webovou stránku}, která se odlišuje tím, že konzistentně komunikuje se serverem skrze požadavky (requesty), které aktualizují data na webové stránce, aniž by ji bylo nutné znovu načítat, respektive žádat o další web page request. Server k tomu využívá programovací jazyky typu PHP, ASP.NET či JSP, přičemž o komunikaci v prohlížeči se stará skript v JavaScriptu. \cite{gfg_dynamic} Všechny sázkové kanceláře mají dynamické webové stránky. \\
 
-Většina dynamických webů disponuje API (Application Programming Interface), což je soubor funkcí umožňujících interakci se serverem. \cite{gfg_webapi} Nás bude zajímat situace, kdy klient obdrží data o kurzech, která se často (ale ne vždy) posílají ve formátu JSON (JavaScript Object Notation), a to nejčastěji skrze metody \textbf{GET} a \textbf{POST}. Jestliže identifikujeme správnou metodu, kterou náš prohlížeč využívá k zasílání kurzů ze serveru do našeho počítače, máme vyhráno, neboť takovou funkci můžeme spustit skrze jakýkoliv program a obdržíme tak přímo čistá data o kurzech.
+Většina dynamických webů disponuje API (Application Programming Interface), což je soubor funkcí umožňujících interakci se serverem. \cite{gfg_webapi} Nás bude zajímat situace, kdy klient obdrží data o kurzech, která se často (ale ne vždy) posílají ve formátu JSON (JavaScript Object Notation), a to nejčastěji skrze metody \textbf{GET} a \textbf{POST}. Jestliže identifikujeme správnou metodu, kterou náš prohlížeč využívá k zasílání kurzů ze serveru do našeho počítače, máme vyhráno, neboť ji můžeme spustit v našem kódu, čímž obdržíme přímo data o kurzech.
 
 \subsection{HTTP GET metoda}
 Metoda HTTP GET žádá server o data bez dalších přidaných informací. Využívá se hlavně při zobrazení dat, která nejsou senzitivní a nepotřebují vstup (input) od uživatele. \cite{gfg_getpost} Často ji tedy využívají kanceláře k zobrazování aktuálních kurzů.
 
 \subsection{HTTP POST metoda}
-Na rozdíl od předchozího případu jsou součástí POST requestu data; jedná se tedy o požadavek se vstupem. \cite{gfg_getpost} Přestože není nezbytný, stránka \url{sport.synottip.cz} využívá metodu POST k přenosu kurzů. Součástí tohoto requestu je pak např. i token, který podle mých odhadů slouží k zamezení automatizovanému extrahování dat z webu skrze boty. 
+Na rozdíl od předchozího případu jsou součástí POST requestu data; jedná se tedy o požadavek se vstupem. \cite{gfg_getpost} Přestože není nezbytný na zobrazování kurzů, některé webové stránky, jako např. \url{sport.synottip.cz} , ji k tomuto učelu využívají. Součástí tohoto požadavku stránky \url{sport.synottip.cz}  je  např. token (pravděpodobně k autentifikačnímu účelu), který podle mých odhadů slouží k zamezení automatizovanému extrahování dat z webu skrze boty. 
 
 \chapter{Implementace}
 
@@ -216,11 +216,11 @@ Poté musíme znovu načíst webovou stránku a počkáme, až se načtou všech
 
 Nejjednodušší případ pro extrakci dat nastane, když se zápasy posílají skrze GET request ve formátu JSON, který není jakkoliv kódovaný. Jak jsem zjistil, tak sázkové kanceláře Fortuna a Kingsbet využívají přesně tuhle metodu a tedy ukážu pouze co dělat v tomhle případě. 
 
-Abychom omezili zobrazenou komunikaci pouze na relevantní, zaklikneme, že chceme vidět pouze XHR - XMLHttpRequest typ požadavku. Tento požadavek nejčastěji využívají interaktivní webové aplikace. \cite{wiki_xmlhttprequest}. Dále tedy musíme prozkoumat každý z těchto requestů. Někdy mohou být pojmenovány tak, že jde poznat o co jde (např. GetEvents), ale nelze na to spoléhat. 
+Abychom omezili zobrazenou komunikaci pouze na relevantní, zaklikneme, že chceme vidět pouze XHR - XMLHttpRequest typ požadavku. Tento požadavek nejčastěji využívají interaktivní webové aplikace. \cite{wiki_xmlhttprequest} Dále tedy musíme prozkoumat každý z těchto requestů. Někdy mohou být pojmenovány tak, že jde poznat o co jde (např. GetEvents), ale nelze na to spoléhat. 
 
 Když člověk klikne pravým tlačítkem myši na daný request a klikne na open in new tab, uvidí JSON formát, který z daného requestu dostanu a taky adresu, přes kterou request udělá. Pokud tímto způsobem rozkliknu několik requestů, které se podle jména zdají relevantní, uvidím několik souborů ve kterých musím nalézt systém jak fungují. Neexistuje jednoznačná metoda jak lze tento systém nazpátek zjistit, ovšem ukážu jak jsem ho zjistil u Fortuny, přičemž u ostatních kanceláří lze pravděpodobně dosáhnout stejného výsledku podobnou metodou, přestože to není zaručené.
 
-Po rozklikuntí několik requestů si doporučuju napsat nějaký základní infomrace o jednom konkrétní zápase (např. název, kurzy) a hledat je v těch datech. Touto metodou jsem zjistil, že data o zápasech jsou v requestu na téhle url:
+Po rozklikuntí několika requestů si doporučuju napsat základní infomrace o jednom konkrétním zápase (např. název, kurzy) a hledat je v rozkliknutých datech. Touto metodou jsem zjistil, že data o zápasech jsou v requestu na téhle url:
 
 \begin{quote}
 .../offer/markets/api/v1\_0/fixture/[id\_zapasu]/markets/overview
@@ -237,7 +237,7 @@ Dalším hledáním jsem našel  request, kde se nachází ID zápasů:
 .../offer/structure/api/v1\_0/tournament/ufo:tour:0i-00d/matches?timeFilter=all
 \end{quote}
 
-Pokračováním zjistím, že ID turnamentů se nachází v tomto requestu:
+Pokračováním zjistím, že ID turnajů se nachází v tomto requestu:
 
 \begin{quote}
 .../offer/structure/api/v1\_0/sport/[id\_sportu]/tournaments?timeFilter=all
@@ -251,21 +251,23 @@ Pokračováním zjistím, že ID turnamentů se nachází v tomto requestu:
 .../offer/structure/api/v1\_0/sports?timeFilter=all
  \end{quote}
  
-Tři tečky ... znamenají https://api.ifortuna.cz. Tedy výsledný kód bude fungovat tak, že si řekne o všechny ID sportů, pak o všechny ID turnajů, poté o všechny ID zápasů a následně tyto zápasy přetransformuje do mojí struktury. 
+Tři tečky ... znamenají https://api.ifortuna.cz. 
+
+Tedy výsledný kód bude fungovat tak, že si řekne o všechny ID sportů, pak o všechny ID turnajů, poté o všechny ID zápasů a následně tyto zápasy přetransformuje do mojí struktury. 
  
  \section{Jak získat GET metodu v C\#}
 Všechny soubory, které extrahují data z externích webů se nachází ve složce ./Background/MatchFinders a jsou spouštěny v souboru OddsFinder.cs
 
-V .NET prostředí lze využít objektu HttpClient, který umožňuje získat GET request na základě webové adresy a to za pomocí GetAsync() metody. Následně jsem z odpovědi vytvořil JsonNode objekt. Tuto metodu lze najít zde ./Background/MatchFinders/KingsbetMatchFinder.GetNodeFromUrl a zde Arbitra./Background/MatchFinders/FortunaMatchFinder.GetNodeFromUrl.
+V .NET prostředí lze využít objektu HttpClient, který umožňuje získat GET request na základě webové adresy a to za pomocí GetAsync() metody. Následně jsem z odpovědi vytvořil JsonNode objekt. Tuto metodu lze najít zde ./Background/MatchFinders/KingsbetMatchFinder.GetNodeFromUrl a zde ./Background/MatchFinders/FortunaMatchFinder.GetNodeFromUrl.
 
 K requestům na webovou stránku Kingsbet bylo potřeba dát header, protože bez něj nedával odpovědi požadavkům.
 
 \section{Struktura ukládání dat}
-Všechny soubory, které tvoří strukturu ukládání zápasů, jsou ve složce ./Data Structure.
+Všechny soubory, které tvoří strukturu ukládání zápasů, jsou ve složce ./DataStructure.
 
-V rámci projektu jsem sbíral kurzy pouze na zápasy a to pouze na vítěze zápasu, případně na dvojtip (neprohra týmu nebo absence remízy). Obecná struktura všech událostí je mnohem složitější na uspořádání a tedy není implementovaná v mém projektu. Zde uvádím jednotlivé třídy a jejich využití:
+V rámci projektu jsem sbíral kurzy pouze na zápasy, a to pouze na vítěze zápasu, případně na dvojtip (neprohra týmu nebo absence remízy). Obecná struktura všech událostí je mnohem složitější na uspořádání a tedy není implementovaná v mém projektu. Zde uvádím jednotlivé třídy a jejich využití:
 
-\textbf{Match} - Když se hledají zápasy, tak se ukládají podle této třídy, která obsahuje jméno zápasu, jméno týmu A, jméno týmu B, datum zápasu a tabulku kurzů, která se ukládá jako pole objektů Odds. Zároveň obsahuje metodu Merge(), která spojuje dva stejné zápasy do jednoho, aby objekt obsahoval informace o všech sázkových kanceláří.
+\textbf{Match} - Když se hledají zápasy, tak se ukládají podle této třídy, která obsahuje jméno zápasu, jméno týmu A, jméno týmu B, datum zápasu a tabulku kurzů, která se ukládá jako pole objektů třídy Odds, kde Odds reprezentují všechny kurzy na daný výsledek. Zároveň obsahuje metodu Merge(), která spojuje dva stejné zápasy do jednoho, aby objekt obsahoval informace o všech sázkových kanceláří.
 
 \textbf{ListOfMatches} - list objektů Match s metodou Merge(), která spojuje stejné zápasy, které najde v listu. Obsahuje metodu SplitToEvents() (stejně jako třída Match), která rozděluje zápasy na několik objektů třídy Event. 
 
@@ -273,7 +275,7 @@ V rámci projektu jsem sbíral kurzy pouze na zápasy a to pouze na vítěze zá
 
 \textbf{Odd} - kurz na konkrétní výsledek vypsaný konkrétní sázkovou kanceláří. Obsahuje kurz, sázkovou kancelář, která kurz vypisuje, a odkaz na zápas. 
 
-\textbf{Odds} - list tříd Odd, který uchovává všechny možné kurzy na jeden konkrétní výsledek zápasu. Obsahuje metodu Sort(), která seřadí kurzy od největšího po nejmenší.
+\textbf{Odds} - list objektů Odd, který uchovává všechny možné kurzy na jeden konkrétní výsledek zápasu. Obsahuje metodu Sort(), která seřadí kurzy od největšího po nejmenší.
 
 \textbf{MatchOdds} - podobná třída jako Odds, ale s metodou Merge(), která sloučí třídy Odds, které reprezentují kurzy na stejné výsledky stejného zápasu.  
 
@@ -305,9 +307,9 @@ Do projektu jsem zakomponoval dockerfile, který umožňuje spustit můj projekt
 
 Po spuštění bude stránka běžet přes port :8080 a tedy stačí navštívit stránku http://localhost:8080, (nikoliv https) případně http://[ip\_adresa]:8080 pro všechny ostatní uživatele na dané síti. 
 
-Po spuštění chvíli trvá, než stránka načte kurzy a tedy se tam pár minut žádné nezobrazují. Následně lze vidět zápasy seřazené podle největšího profitu, respektive nejnižší ztráty. Po rozkliknutí daného zápasu lze vidět tzv. Counter, který spočítá na jaký kurz máte vsadit kolik, aby jste vždycky vyhráli, respektive prohráli, stejné množství peněz. Zároveň ukáže celkový profit.
+Po spuštění chvíli trvá, než stránka načte kurzy a tedy se tam pár minut žádné nezobrazují. Následně lze vidět zápasy seřazené podle největšího profitu, respektive nejnižší ztráty. Po rozkliknutí daného zápasu lze vidět tzv. Counter, který spočítá na jaký kurz máte vsadit kolik, abyste vždycky vyhráli, respektive prohráli, stejné množství peněz. Zároveň ukáže celkový profit.
 
-V konzoli se možná vypíšou errory ohledně nedostupného requestu. Ty pouze informují uživatele o faktu, že se kód snažil získat request, který neexistuje. Nejčastěji z důvodu, že se nějaká hodnota chybně označila za např. ID turnaje, zápasu apod. Díky tomu se snažil kód zíksat request, který neexistuje. Nejedná se ovšem o chybu, která by naznačovala nefunkční systém. Pouze poukazuje na neúplně propracovaný kód na extrahování dat. 
+V konzoli se mohou vypsat errory ohledně nedostupného requestu. Ty pouze informují uživatele o faktu, že se kód snažil získat požadavek, který neexistuje. Nejčastěji z důvodu, že se nějaká hodnota chybně označila za např. ID turnaje, zápasu apod. Díky tomu se snažil kód získat request, který neexistuje. Nejedná se ovšem o chybu, která by naznačovala nefunkční systém. Pouze poukazuje, že kód na extrahování dat není naprogramován důkladně.
 
 Pro aktualizaci programu je potřeba pullnout kód z gitu a znovu vytvořit docker.
 
@@ -323,8 +325,11 @@ Pro aktualizaci programu je potřeba pullnout kód z gitu a znovu vytvořit dock
 \chapter*{Závěr}
 \pagestyle{empty}
 \addcontentsline{toc}{chapter}{Závěr}
+V rámci tohoto projektu jsem vytvořil program, který sbírá data ze dvou sázkových kanceláří, tj. Fortuna a Kingsbet. Konkrétně sbírá kurzy na výhru jednotlivých týmů, remízu nebo tzv. dvojtip (neprohra týmu, nebo výhra jednoho z týmů). Následně kurzy stejné události porovná, určí všechny možné kombinace doplňujících se kurzů a uloží tyto kombinace od nejprofitovanějších. Následně se zobrazují na webové stránce na lokálním počítači. Tímto jsem zcela splnil svůj cíl práce.
 
-Závěr obsahuje shrnutí práce a vyjadřuje se k míře splnění jejího zadání. Dále by se zde mělo objevit sebehodnocení studenta a informace o tom, co nového se naučil a jak vnímal svou práci na projektu.
+V samotné práci jsem popsal současný stav projektů a webových stránek, které nabízí stejnou službu. Zároveň jsem popsal základní způsoby sběru dat z webových stránek. Taktéž jsem popsal, jak jsem našel relevantní GET metody skrze Inspect tool pro stránku \url{www.ifortuna.cz} a jak vypadal finální formát ukládání dat. K tomu jsem vysvětlil, jak můj kód rozpoznává stejné zápasy a taky jsem popsal fungování webové stránky, přes kterou se zápasy vyobrazují.
+
+V rámci projektu jsem se naučil, jak hledat strukturu dat na webové stránce. Zároveň jsem si osvojil programování v jazyku C\# a také vytváření webových stránek v .NET frameworku. Největší chyby mého programu vidím ve struktuře ukládání dat, neboť není připravená na obecnější výsledky typu počet gólů v zápase. Taktéž rozpoznávání zápasů je velmi arbitrární a nezaručuje stoprocentní úspěšnost. Na druhou stranu obsahuje můj projekt funkce, o kterých jsem se v cíli nezmínil. Například si můžete spočítat, kolik vsadit na jaký kurz tak, abyste vždy vyhráli/prohráli stejné množství peněz.
 
 %%% Seznam použité literatury
 % \nocite{einstein}\nocite{latexcompanion}\nocite{knuthwebsite}
