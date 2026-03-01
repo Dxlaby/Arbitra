@@ -1,16 +1,14 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
-[1] Config.pm:310> INFO - Logfile is 'main.blg'
-[212] biber:340> INFO - === Tue Feb 24, 2026, 10:07:22
-[262] Biber.pm:419> INFO - Reading 'main.bcf'
-[434] Biber.pm:979> INFO - Found 5 citekeys in bib section 0
-[452] Biber.pm:4419> INFO - Processing section 0
-[473] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
-[474] bibtex.pm:1713> INFO - LaTeX decoding ...
-[479] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[552] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
-[552] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[552] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'cs_CZ'
-[564] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[566] bbl.pm:763> INFO - Output to main.bbl
-[566] Biber.pm:131> WARN - BibTeX subsystem: /tmp/biber_tmp_X6jg/33e59b5ca9ec342068223d604c3f8d55_85876.utf8, line 28, warning: 534 characters of junk seen at toplevel
-[566] Biber.pm:133> INFO - WARNINGS: 1
+[0] Config.pm:310> INFO - Logfile is 'main.blg'
+[72] biber:340> INFO - === Sun Mar  1, 2026, 21:59:09
+[86] Biber.pm:419> INFO - Reading 'main.bcf'
+[162] Biber.pm:979> INFO - Found 5 citekeys in bib section 0
+[174] Biber.pm:4419> INFO - Processing section 0
+[185] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
+[186] bibtex.pm:1713> INFO - LaTeX decoding ...
+[190] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[247] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[247] UCollate.pm:68> INFO - Overriding locale 'cs_CZ' defaults 'variable = shifted' with 'variable = non-ignorable'
+[248] Biber.pm:4239> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'cs_CZ'
+[256] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[258] bbl.pm:763> INFO - Output to main.bbl

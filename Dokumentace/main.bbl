@@ -19,7 +19,7 @@
 
 \refsection{0}
   \datalist[entry]{anyt/global//global/global}
-    \entry{gfg_dynamic}{misc}{}
+    \entry{gfg_webapi}{misc}{}
       \name{author}{1}{}{%
         {{hash=f1e069787ece74531d112559945c6871}{%
            family={{GeeksforGeeks}},
@@ -32,21 +32,25 @@
       \strng{authornamehash}{f1e069787ece74531d112559945c6871}
       \strng{authorfullhash}{f1e069787ece74531d112559945c6871}
       \field{extraname}{1}
-      \field{labelalpha}{Gee23}
+      \field{labelalpha}{Gee20}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{What is a Dynamic Website?}
-      \field{year}{2023}
+      \field{title}{What is Web API and Why we use it?}
+      \field{urlday}{2}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2020}
+      \field{urldateera}{ce}
       \verb{urlraw}
-      \verb https://www.geeksforgeeks.org/html/dynamic-websites/
+      \verb https://www.geeksforgeeks.org/blogs/what-is-web-api-and-why-we-use-it/
       \endverb
       \verb{url}
-      \verb https://www.geeksforgeeks.org/html/dynamic-websites/
+      \verb https://www.geeksforgeeks.org/blogs/what-is-web-api-and-why-we-use-it/
       \endverb
     \endentry
-    \entry{gfg_getpost}{misc}{}
+    \entry{gfg_dynamic}{misc}{}
       \name{author}{1}{}{%
         {{hash=f1e069787ece74531d112559945c6871}{%
            family={{GeeksforGeeks}},
@@ -59,19 +63,22 @@
       \strng{authornamehash}{f1e069787ece74531d112559945c6871}
       \strng{authorfullhash}{f1e069787ece74531d112559945c6871}
       \field{extraname}{2}
-      \field{labelalpha}{Gee24}
+      \field{labelalpha}{Gee22}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extraalpha}{1}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Difference between HTTP GET and POST Methods}
-      \field{year}{2024}
+      \field{title}{What is a Dynamic Website?}
+      \field{urlday}{2}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2022}
+      \field{urldateera}{ce}
       \verb{urlraw}
-      \verb https://www.geeksforgeeks.org/php/difference-between-http-get-and-post-methods/
+      \verb https://www.geeksforgeeks.org/html/dynamic-websites/
       \endverb
       \verb{url}
-      \verb https://www.geeksforgeeks.org/php/difference-between-http-get-and-post-methods/
+      \verb https://www.geeksforgeeks.org/html/dynamic-websites/
       \endverb
     \endentry
     \entry{gfg_webpage}{misc}{}
@@ -87,14 +94,17 @@
       \strng{authornamehash}{f1e069787ece74531d112559945c6871}
       \strng{authorfullhash}{f1e069787ece74531d112559945c6871}
       \field{extraname}{3}
-      \field{labelalpha}{Gee24}
+      \field{labelalpha}{Gee23}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extraalpha}{2}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Web Page – A Complete Overview}
-      \field{year}{2024}
+      \field{urlday}{2}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2023}
+      \field{urldateera}{ce}
       \verb{urlraw}
       \verb https://www.geeksforgeeks.org/websites-apps/web-page-a-complete-overview/
       \endverb
@@ -102,7 +112,7 @@
       \verb https://www.geeksforgeeks.org/websites-apps/web-page-a-complete-overview/
       \endverb
     \endentry
-    \entry{gfg_webapi}{misc}{}
+    \entry{gfg_getpost}{misc}{}
       \name{author}{1}{}{%
         {{hash=f1e069787ece74531d112559945c6871}{%
            family={{GeeksforGeeks}},
@@ -118,16 +128,19 @@
       \field{labelalpha}{Gee24}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extraalpha}{3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{What is Web API and Why we use it?}
+      \field{title}{Difference between HTTP GET and POST Methods}
+      \field{urlday}{2}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
       \field{year}{2024}
+      \field{urldateera}{ce}
       \verb{urlraw}
-      \verb https://www.geeksforgeeks.org/blogs/what-is-web-api-and-why-we-use-it/
+      \verb https://www.geeksforgeeks.org/php/difference-between-http-get-and-post-methods/
       \endverb
       \verb{url}
-      \verb https://www.geeksforgeeks.org/blogs/what-is-web-api-and-why-we-use-it/
+      \verb https://www.geeksforgeeks.org/php/difference-between-http-get-and-post-methods/
       \endverb
     \endentry
     \entry{wiki_xmlhttprequest}{misc}{}
@@ -148,7 +161,11 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{XMLHttpRequest}
+      \field{urlday}{2}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
       \field{year}{2023}
+      \field{urldateera}{ce}
       \verb{urlraw}
       \verb https://cs.wikipedia.org/wiki/XMLHttpRequest
       \endverb

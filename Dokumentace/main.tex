@@ -40,7 +40,7 @@ Děkuji panu učiteli Emilu Milerovi za jeho ochotu vést můj maturitní projek
 
 % Abstrakt česky
 \def\Abstrakt{%
-Představme si, že dvě sázkové kanceláře vypíšou na jeden zápas natolik odlišné kurzy, že když vsadíme na jedné na jeden výsledek a na druhé opačný výsledek, budeme vždy v profitu, ať už zápas skončí jakkoli. Tento fenomén se opravdu děje a nazývá se arbitrážní sázka nebo surebet. Protože počet kurzů, které sázkové kanceláře vypisují, jsou tisíce, musíme hledání těchto profitujících sázek automatizovat. Přestože se jedná o vyřešený problém, většina těchto automatických vyhledávačů existuje for-profit. Proto jsem vytvořil tento projekt, který spolu s touto dokumentací představuje open-source alternativu ke stávajícím řešením. V rámci projektu jsem vytvořil kód, který extrahuje kurzy na výsledek zápasů z Fortuny a Kingsbetu, přičemž výsledné kurzy srovná, seřadí od nejprofitovanějších a vyobrazí na webové stránce, kterou kód spouští lokálně.
+Představme si, že dvě sázkové kanceláře vypíšou na jeden zápas natolik odlišné kurzy, že když vsadíme na jedné na jeden výsledek a na druhé opačný výsledek, budeme vždy v profitu, ať už zápas skončí jakkoli. Tento fenomén se opravdu děje a nazývá se arbitrážní sázka nebo surebet. Protože sázkové kanceláře vypisují tisíce kurzů, musíme hledání těchto profitujících sázek automatizovat. Přestože se jedná o vyřešený problém, většina těchto automatických vyhledávačů existuje for-profit. Proto jsem vytvořil tento projekt, který spolu s touto dokumentací představuje open-source alternativu ke stávajícím řešením. V rámci projektu jsem vytvořil kód, který extrahuje kurzy na výsledek zápasů z Fortuny a Kingsbetu, přičemž výsledné kurzy srovná, seřadí od nejprofitovanějších a vyobrazí na webové stránce, kterou kód spouští lokálně.
 }
 
 % Abstrakt anglicky
@@ -68,11 +68,11 @@ Let's imagine that two bookmakers offer such different odds on a single match th
 \chapter{Teoretická část}
 \pagestyle{fancy}
 
-V této části vysvětlím, jaká je motivace srovnávat kurzy napříč sázkovými kanceláři, co to je surebet a jak ho spočítat. Kdo docílil podobného výsledku a k tomu popíšu základní fungování webových stránek a jak z nich extrahovat data.
+V této části vysvětlím, jaká je motivace srovnávat kurzy napříč sázkovými kancelářemi, co to je surebet a jak ho spočítat. Kdo docílil podobného výsledku a k tomu popíšu základní fungování webových stránek a jak z nich extrahovat data.
 
 \section{Motivace}
 
-Sázkové kanceláře vypisují kurzy na tisíce zápasů nezávisle na sobě, čímž vzniká šance, že některé z kurzů budou nesprávné – tj. jejich hodnota je vyšší než kurz vyplývající ze skutečné pravděpodobnosti. Díky tomu mohou dvě sázkové kanceláře vypsat na dvě opačné události kurzy natolik vysoké, že pokud člověk vsadí na oba výsledky určité množství peněz, vždy skončí v zisku. Tento fenomén se nazývá surebet nebo-li arbitrážní sázka. 
+Sázkové kanceláře vypisují kurzy na tisíce zápasů nezávisle na sobě, čímž vzniká šance, že některé z kurzů budou nesprávné – tj. jejich hodnota je vyšší než kurz vyplývající ze skutečné pravděpodobnosti. Díky tomu mohou dvě sázkové kanceláře vypsat na dvě opačné události kurzy natolik vysoké, že pokud člověk vsadí na oba výsledky určité množství peněz, vždy skončí v zisku. Tento fenomén se nazývá surebet neboli arbitrážní sázka. 
 
 Další využití srovnávání kurzů se nabízí při plnění bonusů, kde je potřeba prosázet určité množství peněz, aby uživatel získal benefit, typicky ve formě freebetu (sázka zdarma), peněžního obnosu nebo freespinů. V těchto případech je žádoucí najít co nejméně ztrátovou sázku, což právě můj program umožňuje. 
 
@@ -80,7 +80,7 @@ Vědět o profitujících či méně ztrátových příležitostech je tedy klí
 
 \subsection{Počítání arbitrážní sázky}
 
-V této podsekci odvodím pár rovnic, které určí, zda-li mohu udělat surebet. Nechť mám události 1 a 2 s kurzy $k_1$ a $k_2$, přičemž jedna z nich se určitě stane. Pokud mám obnos $V$ a chci vsadit na obě události tak, abych vždy vyhrál (respektive prohrál) stejné množství peněz, musím	 na první vsadit $\frac{V}{k_1}$ a na druhou $ \frac{V}{k_2}$, přičemž abych profitovat, tak musí platit, že
+V této podsekci odvodím pár rovnic, které určí, zda-li mohu udělat surebet. Nechť mám události 1 a 2 s kurzy $k_1$ a $k_2$, přičemž jedna z nich se určitě stane. Pokud mám obnos $V$ a chci vsadit na obě události tak, abych vždy vyhrál (respektive prohrál) stejné množství peněz, musím	 na první vsadit $\frac{V}{k_1}$ a na druhou $ \frac{V}{k_2}$, přičemž abych mohl profitovat, tak musí platit, že
 \begin{equation}
 	\begin{split}
 	\frac{V}{k_1} + \frac{V}{k_2}  &< V \\
@@ -109,7 +109,7 @@ Vklad na $i$-tý kurz $V_i$ lze určit takto:
 
 \section{Existující řešení}
 
-Hledání surebetů není novinkou a v současnosti existuje několik webových stránek a projektů na platformě GitHub, které tuto službu poskytují. Ovšem nezahrnují všechny české sázkové kanceláře (tj. Tipsport, Chance, Fortuna, Betano, Allwyn, Synottip, Kingsbet, MerkurXtip) nebo jsou alespoň částečně placené. V následující tabulce uvádím šest takových webových stránek a sázkové kanceláře, ze kterých extrahují data. Také uvádím projekty na GitHubu, které se touto problematikou zabývají. Tyto projekty jsem vyhledával skrze vyhledávač Google a je tedy pravděpodobné, že jsem některé další mohl přehlédnout. Taktéž jsem netestoval jejich správnost. Zároveň se mi nepodařilo najít projekt na GitHubu, který by srovnával data z českých sázkových kanceláří a hledal arbitráže.
+Hledání surebetů není novinkou a v současnosti existuje několik webových stránek a projektů na platformě GitHub, které tuto službu poskytují. Ovšem nezahrnují všechny české sázkové kanceláře (tj. Tipsport, Chance, Fortuna, Betano, Sazkabet, Synottip, Kingsbet, MerkurXtip) nebo jsou alespoň částečně placené. V následující tabulce uvádím šest takových webových stránek a sázkové kanceláře, ze kterých extrahují data. Také uvádím projekty na GitHubu, které se touto problematikou zabývají. Tyto projekty jsem vyhledával skrze vyhledávač Google a je tedy pravděpodobné, že jsem některé další mohl přehlédnout. Taktéž jsem netestoval jejich správnost. Zároveň se mi nepodařilo najít projekt na GitHubu, který by srovnával data z českých sázkových kanceláří a hledal arbitráže.
 
 \begin{table}[h]
 \centering
@@ -122,7 +122,7 @@ Hledání surebetů není novinkou a v současnosti existuje několik webových 
     \hline
     \multicolumn{10}{|c|}{\rule{0pt}{15pt} \large \textbf{Vyhledávače surebetů – webové stránky}} \\ [1ex]
     \hline
-    \rule{0pt}{45pt} \textbf{Web} & \head{Tipsport} & \head{Chance} & \head{Fortuna} & \head{Betano} & \head{Allwyn} & \head{Synottip} & \head{Kingsbet} & \head{MerkurXtip} & \head{Placený} \\
+    \rule{0pt}{45pt} \textbf{Web} & \head{Tipsport} & \head{Chance} & \head{Fortuna} & \head{Betano} & \head{Sazkabet} & \head{Synottip} & \head{Kingsbet} & \head{MerkurXtip} & \head{Placený} \\
     \hline
     Oddspedia & \no & \no & \no & \yes & \no & \no & \no & \no & \no \\
     \hline
@@ -161,7 +161,7 @@ Hledání surebetů není novinkou a v současnosti existuje několik webových 
     \multirow{2}{5em}{\textbf{Betano}*} & \yes & \url{https://github.com/igormartins0301/projeto-scraping-betano} & Python \\ 
                                        & \yes & \url{https://github.com/hansalemaos/tutorial_raspagem_de_dados_betano/} & Python \\ 
     \hline
-    \textbf{Allwyn} & \no & \nothing & \nothing \\ 
+    \textbf{Sazkabet} & \no & \nothing & \nothing \\ 
     \hline
     \textbf{Synottip} & \no & \nothing & \nothing \\ 
     \hline
@@ -179,7 +179,7 @@ Hledání surebetů není novinkou a v současnosti existuje několik webových 
 
 Jak lze vidět z tabulky webových stránek nabízejících zmíněnou službu, většina z nich uplatňuje restrikci na zobrazení surebetů pro neplatící uživatele. Můj program samozřejmě nemůže konkurovat profesionálním placeným službám jako surebet.com, představuje však open-source alternativu, ke které lze přidat moduly na extrahování dalších stránek, a zároveň zaručuje bezplatnou dostupnost. Největší nevýhodu svého programu oproti alternativám spatřuji v tom, že není schopen rozpoznat arbitráž pro jiné události než základní výsledek zápasů. Výhodou spuštění vlastního programu na lokálním počítači je naopak fakt, že si mohu sám určit frekvenci extrakce, čímž se snižuje šance, že zobrazená data budou zastaralá. \\
 
-Pro svůj projekt jsem si vybral sázkové kanceláře Fortuna a Kingsbet, protože obě disponují API, které jsou snadno pochopitelné (viz následující část), a zároveň se na extrahování dat z Kingsbetu není open-source kód. Tento program jsem psal v programovacím jazyku C\#, protože jsem chtěl k extrakci zakomponovat rozhraní webové stránky, která se velmi dobře programuje v ASP.NET frameworku, který existuje pouze pro C\#. Projekt by určitě šel udělat i v Pythonu, ale na větší projekty se podle mého uvážení nehodí. 
+Pro svůj projekt jsem si vybral sázkové kanceláře Fortuna a Kingsbet, protože obě disponují API, které jsou snadno pochopitelné (viz následující část), a zároveň se na extrahování dat z Kingsbetu není open-source kód. Tento program jsem psal v programovacím jazyku C\#, protože jsem chtěl k extrakci zakomponovat rozhraní webové stránky, která se velmi dobře programuje v ASP.NET frameworku, pro který je primárním jazykem C\#. Projekt by určitě šel udělat i v Pythonu, ale na větší projekty se podle mého uvážení nehodí. 
 
 \section{Metody sběru dat z webové stránky}
 Webové stránky vznikly za účelem vytvoření uživatelsky přívětivé a automatizované komunikace mezi uživatelem a organizací (např. firmou, univerzitou, školou atd.). V současné době se ustálil model, kdy si organizace pořídí nebo pronajme server a webovou adresu. Následně uživatel zadá danou adresu do prohlížeče a obdrží soubory od serveru, které se mu zobrazí jako webová stránka. Typicky obdrží HTML soubor se základní strukturou stránky, CSS soubory, které upravují vzhled HTML souboru, a JavaScriptové soubory, které definují interaktivní prvky stránky. Webové stránky dělíme na dva typy. \cite{gfg_webpage}\\
@@ -198,14 +198,14 @@ Na rozdíl od předchozího případu jsou součástí POST requestu data; jedn�
 
 \chapter{Implementace}
 
-V této části uvedu, jak jsem nalezl vhodné GET mteody, přes které se posílají kurzy.  Taktéž vysvětlím, jak v mém projektu funguje databáze ukládání zápasů a jak kód rozpoznává stejné zápasy.
+V této části uvedu, jak jsem nalezl vhodné GET metody, přes které se posílají kurzy.  Taktéž vysvětlím, jak v mém projektu funguje databáze ukládání zápasů a jak kód rozpoznává stejné zápasy.
 
 \section{Nalézání vhodných GET metod}
 Jak již bylo zmíněno v minulé části, většina webových stránek komunikuje se svým serverem skrze API. Tuto komunikaci lze vidět i v prohlížeči za pomocí Inspect tool. Tedy v této části popíšu, jak lze dané requesty vidět v prohlížeči Firefox. Ostatní prohlížeče typu Google Chrome budou fungovat velmi podobně a lze je na tyto účely využít.
 
 Po otevření dané stránky, kterou chceme prohledat klikneme kdekoliv na stránce pravým tlačítkem myši a zvolíme možnost Inspect. Následně v horní liště zvolíme Network, čímž uvidíme celou následující komunikaci mezi serverem a stránkou. Tedy předchozí requesty tam nevidíme. Otevření Network lišty lze také docílit za pomocí zkratky Ctrl + Shift + E. 
 
-Poté musíme znovu načíst webovou stránku a počkáme, až se načtou všechny potřebné data, což jsou v našem případě kurzy. Následně zastavíme další záznam komunikace skrze tlačítko Pause s ikonoou II, aby se nám do toho nepletly např. requesty pro live sázky, které se každou chvílí aktualizují. Nyní vidíme všechnu komunikaci, přes kterou by se mohly kurzy posílat (viz. Obr. \ref{fig:fortuna_inspect_network}).
+Poté musíme znovu načíst webovou stránku a počkáme, až se načtou všechna potřebná data, což jsou v našem případě kurzy. Následně zastavíme další záznam komunikace skrze tlačítko Pause s ikonou II, aby se nám do toho nepletly např. requesty pro live sázky, které se každou chvílí aktualizují. Nyní vidíme všechnu komunikaci, přes kterou by se mohly kurzy posílat (viz. Obr. \ref{fig:fortuna_inspect_network}).
 
 \begin{figure}[htbp]
 	\centering
@@ -269,13 +269,13 @@ V rámci projektu jsem sbíral kurzy pouze na zápasy, a to pouze na vítěze z�
 
 \textbf{Match} - Když se hledají zápasy, tak se ukládají podle této třídy, která obsahuje jméno zápasu, jméno týmu A, jméno týmu B, datum zápasu a tabulku kurzů, která se ukládá jako pole objektů třídy Odds, kde Odds reprezentují všechny kurzy na daný výsledek. Zároveň obsahuje metodu Merge(), která spojuje dva stejné zápasy do jednoho, aby objekt obsahoval informace o všech sázkových kanceláří.
 
-\textbf{ListOfMatches} - list objektů Match s metodou Merge(), která spojuje stejné zápasy, které najde v listu. Obsahuje metodu SplitToEvents() (stejně jako třída Match), která rozděluje zápasy na několik objektů třídy Event. 
+\textbf{ListOfMatches} - seznam objektů Match s metodou Merge(), která spojuje stejné zápasy, které najde v seznamu. Obsahuje metodu SplitToEvents() (stejně jako třída Match), která rozděluje zápasy na několik objektů třídy Event. 
 
 \textbf{Event} - podobná struktura jako Match, ale může se stát pouze jeden výsledek z uvedených kurzů. Zároveň lze získat profit ze sázení na tyto události podle vzorců uvedených v motivaci. Taktéž lze tuto třídu serializovat a deserializovat do JSON objektu.
 
 \textbf{Odd} - kurz na konkrétní výsledek vypsaný konkrétní sázkovou kanceláří. Obsahuje kurz, sázkovou kancelář, která kurz vypisuje, a odkaz na zápas. 
 
-\textbf{Odds} - list objektů Odd, který uchovává všechny možné kurzy na jeden konkrétní výsledek zápasu. Obsahuje metodu Sort(), která seřadí kurzy od největšího po nejmenší.
+\textbf{Odds} - seznam objektů Odd, který uchovává všechny možné kurzy na jeden konkrétní výsledek zápasu. Obsahuje metodu Sort(), která seřadí kurzy od největšího po nejmenší.
 
 \textbf{MatchOdds} - podobná třída jako Odds, ale s metodou Merge(), která sloučí třídy Odds, které reprezentují kurzy na stejné výsledky stejného zápasu.  
 
@@ -285,12 +285,12 @@ Ze zápasů jsem sbíral jména týmů a datum. Protože kanceláře mohou využ
 \item Zkrácený název prvního týmu prvního zápasu je obsažen ve zkráceném názvu prvního týmu ve druhém zápasu, nebo naopak.\\
 \item Zkrácený název druhého týmu prvního zápasu je obsažen ve zkráceném názvu druhého týmu ve druhém zápasu, nebo naopak.\\
 \item Počet možností, jak zápas může skončit je stejný.\\
-\item Čas, kdy se zápasy konají jsou stejné.\\
+\item Čas, kdy se zápasy konají, je stejný.\\
 \end{enumerate}
 Tento systém rozpoznání stejných zápasů je naprosto arbitrární a nezaručuje stoprocentní úspěšnost. Kvůli identitě času konání je pravděpodobnost na neúspěšnost relativně malá, ovšem pro budoucí vývoj je potřeba vymyslet více robustní metodu.
 
 \section{Uživatelské rozhraní}
-Jakožto uživatelské rozhraní jsem si vybral webovou stránku, kterou jsem programoval v ASP.NET frameworku. Jedná se o populární a open source framework na vytváření webových stránek. Uživatel při otevření mého projektu tedy bude obeznámen s rozhraním pro něho známé, tj. rozhraní webových stránek, což je z mého pohledu přívětivější než rozhraní vlastní aplikace, případně výpisu z konzoly. Zároveň zakomponování tohoto projektu do webové stránky umožňuje budoucí uplatnění, pokud se někdy v budoucnu rozhodnu spouštět tento projekt na internet skrze server. 
+Jakožto uživatelské rozhraní jsem si vybral webovou stránku, kterou jsem vyvíjel v ASP.NET frameworku. Jedná se o populární a open source framework na vytváření webových stránek. Uživatel při otevření mého projektu tedy bude obeznámen s rozhraním uživateli známé, tj. rozhraní webových stránek, což je z mého pohledu přívětivější než rozhraní vlastní aplikace, případně výpisu z konzole. Zároveň zakomponování tohoto projektu do webové stránky umožňuje budoucí uplatnění, pokud se někdy v budoucnu rozhodnu spouštět tento projekt veřejně. 
 
 Na hlavní stránce uživatel vidí všechny zápasy s primárními kurzy seřazené od nejvýdělečnějších kurzů, respektive od nejméně prodělečných. Daný kurz si člověk může rozkliknout, čímž se dostane na stránku daného zápasu dané sázkové kanceláře. Také si může rozkliknout zápas jako takový, čímž se dostane do Countru, který umožňuje spočítat, kolik na jaký kurz vsadit, aby byla sázka vždy stejně výnosná. 
 
@@ -309,12 +309,12 @@ Po spuštění bude stránka běžet přes port :8080 a tedy stačí navštívit
 
 Po spuštění chvíli trvá, než stránka načte kurzy a tedy se tam pár minut žádné nezobrazují. Následně lze vidět zápasy seřazené podle největšího profitu, respektive nejnižší ztráty. Po rozkliknutí daného zápasu lze vidět tzv. Counter, který spočítá na jaký kurz máte vsadit kolik, abyste vždycky vyhráli, respektive prohráli, stejné množství peněz. Zároveň ukáže celkový profit.
 
-V konzoli se mohou vypsat errory ohledně nedostupného requestu. Ty pouze informují uživatele o faktu, že se kód snažil získat požadavek, který neexistuje. Nejčastěji z důvodu, že se nějaká hodnota chybně označila za např. ID turnaje, zápasu apod. Díky tomu se snažil kód získat request, který neexistuje. Nejedná se ovšem o chybu, která by naznačovala nefunkční systém. Pouze poukazuje, že kód na extrahování dat není naprogramován důkladně.
+V konzoli se mohou vypsat errory ohledně nedostupného requestu. Ty pouze informují uživatele o faktu, že se kód snažil získat požadavek, který neexistuje. Nejčastěji z důvodu, že se nějaká hodnota chybně označila za např. ID turnaje, zápasu apod. Nejedná se ovšem o chybu, která by znamenala nefunkční systém. Občas prostě kód vyzkouší požadavek, který nefunguje. 
 
 Pro aktualizaci programu je potřeba pullnout kód z gitu a znovu vytvořit docker.
 
 \begin{quote}
-	git pull https://github.com/Dxlaby/Arbitra
+	git pull
 	
 	sudo docker compose down
 	
@@ -329,7 +329,7 @@ V rámci tohoto projektu jsem vytvořil program, který sbírá data ze dvou sá
 
 V samotné práci jsem popsal současný stav projektů a webových stránek, které nabízí stejnou službu. Zároveň jsem popsal základní způsoby sběru dat z webových stránek. Taktéž jsem popsal, jak jsem našel relevantní GET metody skrze Inspect tool pro stránku \url{www.ifortuna.cz} a jak vypadal finální formát ukládání dat. K tomu jsem vysvětlil, jak můj kód rozpoznává stejné zápasy a taky jsem popsal fungování webové stránky, přes kterou se zápasy vyobrazují.
 
-V rámci projektu jsem se naučil, jak hledat strukturu dat na webové stránce. Zároveň jsem si osvojil programování v jazyku C\# a také vytváření webových stránek v .NET frameworku. Největší chyby mého programu vidím ve struktuře ukládání dat, neboť není připravená na obecnější výsledky typu počet gólů v zápase. Taktéž rozpoznávání zápasů je velmi arbitrární a nezaručuje stoprocentní úspěšnost. Na druhou stranu obsahuje můj projekt funkce, o kterých jsem se v cíli nezmínil. Například si můžete spočítat, kolik vsadit na jaký kurz tak, abyste vždy vyhráli/prohráli stejné množství peněz.
+V rámci projektu jsem se naučil, jak hledat strukturu dat na webové stránce. Zároveň jsem si osvojil programování v jazyku C\# a také vytváření webových stránek v ASP.NET frameworku. Největší chyby mého programu vidím ve struktuře ukládání dat, neboť není připravená na obecnější výsledky typu počet gólů v zápase. Taktéž rozpoznávání zápasů je velmi arbitrární a nezaručuje stoprocentní úspěšnost. Na druhou stranu obsahuje můj projekt funkce, o kterých jsem se v cíli nezmínil. Například si můžete spočítat, kolik vsadit na jaký kurz tak, abyste vždy vyhráli/prohráli stejné množství peněz.
 
 %%% Seznam použité literatury
 % \nocite{einstein}\nocite{latexcompanion}\nocite{knuthwebsite}
