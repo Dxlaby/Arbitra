@@ -321,7 +321,7 @@ Pro aktualizaci programu je potřeba pullnout kód z gitu a znovu vytvořit dock
 	docker compose up --build
 \end{verbatim}
 
-Příklad spuštěné webové aplikace lze vidět na Obr.  \ref{fig:web_example}. Uživatel si může rozkliknout jednotlivé zápasy, čímž se dostane na stránku Counter, kde si může spočítat, kolik na jaký kurz vsadit, aby vždy vyhrál stejně. Rozkliknutím kurzu se otevře stránka daného zápasu, pro který se kurz vypsal. 
+Příklad spuštěné webové aplikace lze vidět na Obr.  \ref{fig:web_example}. Uživatel si může rozkliknout jednotlivé zápasy, čímž se dostane na stránku Counter, kde si může spočítat, kolik na jaký kurz vsadit, aby vždy vyhrál stejně. (viz. Obr. \ref{fig:counter}) Rozkliknutím kurzu se otevře stránka daného zápasu, pro který se kurz vypsal. 
 
 \begin{figure}[htbp]
 	\centering
@@ -340,11 +340,11 @@ Příklad spuštěné webové aplikace lze vidět na Obr.  \ref{fig:web_example}
 \chapter*{Závěr}
 \pagestyle{empty}
 \addcontentsline{toc}{chapter}{Závěr}
-V rámci tohoto projektu jsem vytvořil program, který sbírá data ze dvou sázkových kanceláří, tj. Fortuna a Kingsbet. Konkrétně sbírá kurzy na výhru jednotlivých týmů, remízu nebo tzv. dvojtip (neprohra týmu, nebo výhra jednoho z týmů). Následně kurzy stejné události porovná, určí všechny možné kombinace doplňujících se kurzů a uloží tyto kombinace od nejprofitovanějších. Následně se zobrazují na webové stránce na lokálním počítači. Tímto jsem zcela splnil svůj cíl práce.
+V rámci tohoto projektu jsem vytvořil program, který sbírá data ze dvou sázkových kanceláří, tj. Fortuna a Kingsbet. Konkrétně sbírá kurzy na výhru jednotlivých týmů, remízu nebo tzv. dvojtip (neprohra týmu, nebo výhra jednoho z týmů). Následně kurzy stejné události porovná, určí všechny možné kombinace doplňujících se kurzů a uloží je od nejprofitovanějších. Poté je vyobrazí na webové stránce, která byla naprogramována ve frameworku ASP.NET v programovacím jazyku C\#. Všechny cíle projektu tedy byly splněny.
 
-V samotné práci jsem popsal současný stav projektů a webových stránek, které nabízí stejnou službu. Zároveň jsem popsal základní způsoby sběru dat z webových stránek. Taktéž jsem popsal, jak jsem našel relevantní GET metody skrze Inspect tool pro stránku \url{www.ifortuna.cz} a jak vypadal finální formát ukládání dat. K tomu jsem vysvětlil, jak můj kód rozpoznává stejné zápasy a taky jsem popsal fungování webové stránky, přes kterou se zápasy vyobrazují.
+V samotné práci jsem popsal současný stav projektů a webových stránek, které nabízí stejnou službu. Zároveň jsem popsal základní způsoby sběru dat z webových stránek. Taktéž jsem vysvětlil, jak jsem našel relevantní GET metody skrze Inspect tool pro stránku \url{www.ifortuna.cz} a jak vypadal finální formát ukládání dat. K tomu jsem představil, jak můj kód rozpoznává stejné zápasy a taky jsem popsal fungování a uživatelské rozhraní webové stránky, přes kterou se zápasy vyobrazují.
 
-V rámci projektu jsem se naučil, jak hledat strukturu dat na webové stránce. Zároveň jsem si osvojil programování v jazyku C\# a také vytváření webových stránek v ASP.NET frameworku. Největší chyby mého programu vidím ve struktuře ukládání dat, neboť není připravená na obecnější výsledky typu počet gólů v zápase. Taktéž rozpoznávání zápasů je velmi arbitrární a nezaručuje stoprocentní úspěšnost. Na druhou stranu obsahuje můj projekt funkce, o kterých jsem se v cíli nezmínil. Například si můžete spočítat, kolik vsadit na jaký kurz tak, abyste vždy vyhráli/prohráli stejné množství peněz.
+Největší chyby mého programu vidím ve struktuře ukládání dat, neboť není připravená na obecnější výsledky typu počet gólů v zápase. Taktéž rozpoznávání zápasů je velmi arbitrární a nezaručuje stoprocentní úspěšnost. Na tyto dva problémy bych se chtěl do budoucna zaměřit. Na druhou stranu jsem v rámci projektu vyvinul funkce, o kterých jsem se v cíli ani nezmínil. Například si uživatel může spočítat, kolik vsadit na jaký kurz tak, aby vždy vyhráli/prohrál stejné množství peněz.
 
 %%% Seznam použité literatury
 % \nocite{einstein}\nocite{latexcompanion}\nocite{knuthwebsite}
