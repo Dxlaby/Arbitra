@@ -290,9 +290,13 @@ Ze zápasů jsem sbíral jména týmů a datum. Protože kanceláře mohou využ
 Tento systém rozpoznání stejných zápasů je naprosto arbitrární a nezaručuje stoprocentní úspěšnost. Kvůli identitě času konání je pravděpodobnost na neúspěšnost relativně malá, ovšem pro budoucí vývoj je potřeba vymyslet více robustní metodu.
 
 \section{Uživatelské rozhraní}
-Jakožto uživatelské rozhraní jsem si vybral webovou stránku, kterou jsem vyvíjel v ASP.NET frameworku. Jedná se o populární a open source framework na vytváření webových stránek. Uživatel při otevření mého projektu tedy bude obeznámen s rozhraním uživateli známé, tj. rozhraní webových stránek, což je z mého pohledu přívětivější než rozhraní vlastní aplikace, případně výpisu z konzole. Zároveň zakomponování tohoto projektu do webové stránky umožňuje budoucí uplatnění, pokud se někdy v budoucnu rozhodnu spouštět tento projekt veřejně. 
+V rámci volby uživatelského rozhraní se nabízejí dvě základní možnosti – desktopová, nebo webová aplikace. Desktopová aplikace by běžela nativně na operačním systému, což by teoreticky umožnilo vyšší výkon \cite{medium_web_vs_desktop_app}. Ta ovšem pro účely mého projektu není klíčová, neboť zpracovávaný objem dat nevyžaduje vysokou výkonnost. Zvolil jsem proto webovou aplikaci, která v mém případě běží lokálně, čímž odpadají náklady na provoz externího serveru.
 
-Na hlavní stránce uživatel vidí všechny zápasy s primárními kurzy seřazené od nejvýdělečnějších kurzů, respektive od nejméně prodělečných. Daný kurz si člověk může rozkliknout, čímž se dostane na stránku daného zápasu dané sázkové kanceláře. Také si může rozkliknout zápas jako takový, čímž se dostane do Countru, který umožňuje spočítat, kolik na jaký kurz vsadit, aby byla sázka vždy stejně výnosná. 
+Hlavní přínos webového rozhraní spočívá v tom, že výsledky si může zobrazit jakýkoliv uživatel v rámci dané sítě. Zároveň je toto prostředí pro uživatele přirozené a intuitivní – například prokliknutí z aplikace přímo na web sázkové kanceláře působí v prohlížeči intuitivně. Často zmiňovanou nevýhodou webových aplikací je nižší bezpečnost oproti aplikacím nativním \cite{medium_web_vs_desktop_app}, což se však mého projektu netýká, jelikož aplikace nepracuje se senzitivními údaji.
+
+Jakožto vývojové prostředí jsem tedy zvolil ASP.NET Core. Jedná se o populární open-source framework, který je pro tento typ aplikací ideální. 
+
+Co se struktury rozhraní týče, tak na hlavní stránce uživatel vidí všechny zápasy s primárními kurzy seřazené od nejvýdělečnějších kurzů, respektive od nejméně prodělečných. Daný kurz si člověk může rozkliknout, čímž se dostane na stránku daného zápasu dané sázkové kanceláře. Také si může rozkliknout zápas jako takový, čímž se dostane do Countru, který umožňuje spočítat, kolik na jaký kurz vsadit, aby byla sázka vždy stejně výnosná. 
 
 \chapter{Technická dokumentace}
 Do projektu jsem zakomponoval dockerfile, který umožňuje spustit můj projekt v docker containeru. K spuštění je potřeba mít nainstalovaný a funkční git a docker. Dále stačí naklonovat repozitář do svého počítače a spustit ho v dockeru. Na linuxu toho lze docílit s těmito commandy: 

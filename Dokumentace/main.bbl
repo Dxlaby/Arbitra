@@ -143,6 +143,36 @@
       \verb https://www.geeksforgeeks.org/php/difference-between-http-get-and-post-methods/
       \endverb
     \endentry
+    \entry{medium_web_vs_desktop_app}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=87f8a6ab85c9ced3702b4ea641ad4bb5}{%
+           family={{Medium}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{87f8a6ab85c9ced3702b4ea641ad4bb5}
+      \strng{fullhash}{87f8a6ab85c9ced3702b4ea641ad4bb5}
+      \strng{bibnamehash}{87f8a6ab85c9ced3702b4ea641ad4bb5}
+      \strng{authorbibnamehash}{87f8a6ab85c9ced3702b4ea641ad4bb5}
+      \strng{authornamehash}{87f8a6ab85c9ced3702b4ea641ad4bb5}
+      \strng{authorfullhash}{87f8a6ab85c9ced3702b4ea641ad4bb5}
+      \field{labelalpha}{Med24}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Web vs Desktop Applications: Key Differences Explained}
+      \field{urlday}{2}
+      \field{urlmonth}{3}
+      \field{urlyear}{2026}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://medium.com/theymakedesign/web-app-vs-desktop-app-3841e8cb3996
+      \endverb
+      \verb{url}
+      \verb https://medium.com/theymakedesign/web-app-vs-desktop-app-3841e8cb3996
+      \endverb
+    \endentry
     \entry{wiki_xmlhttprequest}{misc}{}
       \name{author}{1}{}{%
         {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%

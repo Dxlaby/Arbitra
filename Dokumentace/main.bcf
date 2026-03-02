@@ -2367,6 +2367,8 @@
     <bcf:citekey order="4" intorder="1">gfg_getpost</bcf:citekey>
     <bcf:citekey order="5" intorder="1">gfg_getpost</bcf:citekey>
     <bcf:citekey order="6" intorder="1">wiki_xmlhttprequest</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">medium_web_vs_desktop_app</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">medium_web_vs_desktop_app</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">
