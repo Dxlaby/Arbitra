@@ -295,15 +295,15 @@ Jakožto uživatelské rozhraní jsem si vybral webovou stránku, kterou jsem vy
 Na hlavní stránce uživatel vidí všechny zápasy s primárními kurzy seřazené od nejvýdělečnějších kurzů, respektive od nejméně prodělečných. Daný kurz si člověk může rozkliknout, čímž se dostane na stránku daného zápasu dané sázkové kanceláře. Také si může rozkliknout zápas jako takový, čímž se dostane do Countru, který umožňuje spočítat, kolik na jaký kurz vsadit, aby byla sázka vždy stejně výnosná. 
 
 \chapter{Technická dokumentace}
-Do projektu jsem zakomponoval dockerfile, který umožňuje spustit můj projekt v docker containeru. K spuštění je potřeba mít nainstalovaný git a docker. Dále stačí naklonovat repozitář do svého počítače a spustit ho v dockeru. Na linuxu toho lze docílit s těmito commandy: 
-
-\begin{quote}
+Do projektu jsem zakomponoval dockerfile, který umožňuje spustit můj projekt v docker containeru. K spuštění je potřeba mít nainstalovaný a funkční git a docker. Dále stačí naklonovat repozitář do svého počítače a spustit ho v dockeru. Na linuxu toho lze docílit s těmito commandy: 
+\begin{verbatim}
 	git clone https://github.com/Dxlaby/Arbitra
-	
+
 	cd Arbitra
-	
-	sudo docker compose up --build
-\end{quote}
+
+	docker compose up --build
+\end{verbatim}
+
 
 Po spuštění bude stránka běžet přes port :8080 a tedy stačí navštívit stránku http://localhost:8080, (nikoliv https) případně http://[ip\_adresa]:8080 pro všechny ostatní uživatele na dané síti. 
 
@@ -313,14 +313,29 @@ V konzoli se mohou vypsat errory ohledně nedostupného requestu. Ty pouze infor
 
 Pro aktualizaci programu je potřeba pullnout kód z gitu a znovu vytvořit docker.
 
-\begin{quote}
+\begin{verbatim}
 	git pull
 	
-	sudo docker compose down
+	docker compose down
 	
-	sudo docker compose up --build
-\end{quote}
+	docker compose up --build
+\end{verbatim}
 
+Příklad spuštěné webové aplikace lze vidět na Obr.  \ref{fig:web_example}. Uživatel si může rozkliknout jednotlivé zápasy, čímž se dostane na stránku Counter, kde si může spočítat, kolik na jaký kurz vsadit, aby vždy vyhrál stejně. Rozkliknutím kurzu se otevře stránka daného zápasu, pro který se kurz vypsal. 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/Main.png} 
+	\caption{Hlavní stránka webové aplikace.}
+	\label{fig:web_example}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{img/Counter.png} 
+	\caption{Stránka Counter pro rozkliknutý zápas.}
+	\label{fig:counter}
+\end{figure}
 
 \chapter*{Závěr}
 \pagestyle{empty}
@@ -334,16 +349,6 @@ V rámci projektu jsem se naučil, jak hledat strukturu dat na webové stránce.
 %%% Seznam použité literatury
 % \nocite{einstein}\nocite{latexcompanion}\nocite{knuthwebsite}
 \printbibliography[title={Seznam použité literatury},heading={bibintoc}]
-
-%%% Seznam obrázků
-\openright
-\listoffigures
-\addcontentsline{toc}{chapter}{Seznam obrázků}
-
-%%% Seznam tabulek
-\clearpage
-\listoftables
-\addcontentsline{toc}{chapter}{Seznam tabulek}
 
 %%% Přílohy k práci, existují-li. Každá příloha musí být alespoň jednou
 %%% odkazována z vlastního textu práce. Přílohy se číslují.

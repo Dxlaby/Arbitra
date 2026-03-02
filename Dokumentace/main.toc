@@ -13,7 +13,5 @@
 \contentsline {section}{\numberline {2.4}Rozpoznání stejných zápasů}{9}{section.2.4}%
 \contentsline {section}{\numberline {2.5}Uživatelské rozhraní}{10}{section.2.5}%
 \contentsline {chapter}{\numberline {3}Technická dokumentace}{11}{chapter.3}%
-\contentsline {chapter}{Závěr}{13}{chapter*.10}%
-\contentsline {chapter}{Seznam použité literatury}{15}{chapter*.11}%
-\contentsline {chapter}{Seznam obrázků}{17}{chapter*.11}%
-\contentsline {chapter}{Seznam tabulek}{18}{chapter*.11}%
+\contentsline {chapter}{Závěr}{13}{chapter*.12}%
+\contentsline {chapter}{Seznam použité literatury}{15}{chapter*.13}%
