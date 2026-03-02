@@ -1,4 +1,6 @@
 # Arbitra
 Extrahování kurzů nabízených sázkovými kanceláři.
 
-Cílem této práce je vytvořit program, který bude extrahovat data z webových stránek sázkových kanceláří, zejména kurzy na jednotlivé sportovní zápasy. Program bude schopen rozpoznat totožné události nabízené různými sázkovými kancelářemi, určit pro každou z nich nejvyšší dostupný kurz a případně identifikovat možnost uzavření tzv. arbitrážní sázky.
+Tento maturitní projekt na informatiku pro rok 2025/2026 má za cíl vytvořit program, který extrahuje data ze sázkových kanceláří, konkrétně z Fortuny a Kingsbetu.
+
+Úplnou dokumentaci lze najít zde: [./Dokumentace/main.pdf](Dokumentace/main.pdf)
